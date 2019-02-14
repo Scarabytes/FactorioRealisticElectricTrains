@@ -1,0 +1,13 @@
+Image Size:           48*48
+1 tile horizontally:  32px
+1 tile vertically:    23px
+
+Image Center:           24:24
+Object Center:           8:24
+  Shift by pixel:       16: 0
+3D Position:          -0.5: 0: 0
+  Shift by pixel:      -16: 0
+Cosmetic shift:          0: 8
+Total shift by pixel:    0: 8
+
+Frames: 8

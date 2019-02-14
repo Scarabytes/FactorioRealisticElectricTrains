@@ -1,0 +1,16 @@
+Image Size:           136*136
+1 tile horizontally:  32px
+1 tile vertically:    22px
+
+Image Center:           68:68
+Object Center:          53:59
+  Shift by pixel:       15: 9
+Cosmetic shift:          0: 8
+Total shift by pixel:   15:17
+
+Centering the image on left/topmost tile of the rail instead of on the signal is
+really weird... Also, quite a lot of image area is wasted - compare the sprite
+size to the one of the normal signal.
+
+Frames: 5*8, verticals first
+Off, Red, Yellow, Green, Blue

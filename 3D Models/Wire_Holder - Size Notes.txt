@@ -1,0 +1,22 @@
+Image Size:           148*108
+1 tile horizontally:  32px
+1 tile vertically:    23px
+
+- Solid picture:
+Image center:         74:54
+Object center:        74:67
+  Shift by pixel:      0:-13
+3D Position:           0:  0:3
+  Shift by pixel:      0:-69
+Cosmetic shift:        0:  8
+Total Shift by pixel:  0:-74
+
+- Shadow picture:
+Image center:         74:54
+3D Position relative to solid picture: 
+                       0:2.1:-3.6
+  Shift by pixel:     67:83
+Cosmetic shift:        0: 8
+Total Shift by pixel: 67: 9
+
+Frames: 8*1

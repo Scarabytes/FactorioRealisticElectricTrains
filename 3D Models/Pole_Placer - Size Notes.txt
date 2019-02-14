@@ -1,0 +1,11 @@
+Image size:          160*160
+1 tile horizontally: 32px
+1 tile vertically:   23px
+
+Image center:        80:80
+Object center:       80:143
+  Shift by pixel:     0:-63
+Cosmetic shift:       0: 8
+Total shift by pixel: 0:-55
+
+Frames: 8*1
