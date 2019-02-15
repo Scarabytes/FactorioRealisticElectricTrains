@@ -22,12 +22,14 @@ enable_failure_text = settings.global["ret-enable-failure-text"].value
 enable_connect_particles = settings.global["ret-enable-connect-particles"].value
 max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
 enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+enable_circuit_wire = settings.global["ret-enable-circuit-wire"].value
 
 function cache_settings()
 	enable_failure_text = settings.global["ret-enable-failure-text"].value
 	enable_connect_particles = settings.global["ret-enable-connect-particles"].value
 	max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
 	enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+	enable_circuit_wire = settings.global["ret-enable-circuit-wire"].value
 end
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, cache_settings)
@@ -45,10 +47,6 @@ function create_pole(event)
 	local force = placer.force
 	local direction = placer.direction
 	local surface = placer.surface
-	-- TODO: Cache signal wires
-
-	placer.destroy() -- Need to destroy first, because signals can't be placed
-	               -- on top of each other
 
 	local actual_pole = {
 		["ret-pole-placer"] = "ret-pole-base",
@@ -56,13 +54,17 @@ function create_pole(event)
 		["ret-chain-pole-placer"] = "ret-chain-pole-base"
 	}
 
+	local pole_name, pole_direction = fix_pole_build_name_and_dir(
+	                                    actual_pole[placer_name], direction)
+
 	local pole = surface.create_entity {
-		name = actual_pole[placer_name],
+		name = pole_name,
 		force = force,
 		position = pos,
-		direction = fix_pole_build_dir(direction, placer_name)
+		direction = pole_direction,
+		fast_replace = true
 	}
-	
+
 
 	-- create wire, power and the pole rendering element
 	local wire_pos = wire_pos_for_pole(pole.position, fix_pole_dir(pole))
@@ -87,7 +89,7 @@ function create_pole(event)
 		name = holder_name,
 		force = force,
 		position = pos,
-		direction = 2 * math.floor(direction / 2)
+		direction = direction - (direction % 2)
 	}
 
 
@@ -185,7 +187,8 @@ script.on_event({
 	function (event)
 		local n = event.entity.name
 
-		if n == "ret-pole-base" or
+		if n == "ret-pole-base-straight" or
+		   n == "ret-pole-base-diagonal" or
 		   n == "ret-signal-pole-base" or
 		   n == "ret-chain-pole-base" then
 				destroy_pole(event)
@@ -236,6 +239,13 @@ script.on_event(defines.events.on_tick, on_tick)
 
 -- Replacement scripts for the pole placer
 
+local valid_poles = {
+	["ret-pole-base-straight"] = true,
+	["ret-pole-base-diagonal"] = true,
+	["ret-signal-pole-base"] = true,
+	["ret-chain-pole-base"] = true
+}
+
 local pole_to_placer = {
 	["ret-pole-base"] = "ret-pole-placer",
 	["ret-signal-pole-base"] = "ret-signal-pole-placer",
@@ -258,11 +268,11 @@ script.on_event(defines.events.on_player_setup_blueprint,
 			local entities = stack.get_blueprint_entities()
 			local modified = false
 			for _, entity in pairs(entities) do
-				local replace = pole_to_placer[entity.name]
-				if replace then
+				if valid_poles[entity.name] then
+					local entity_name, entity_direction = fix_pole_name_and_dir(entity)
 					modified = true
-					entity.direction = fix_pole_dir(entity)
-					entity.name = replace
+					entity.direction = entity_direction
+					entity.name = pole_to_placer[entity_name]
 				end
 			end
 			if modified then

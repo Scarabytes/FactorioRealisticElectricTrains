@@ -12,21 +12,55 @@ local empty_circuit_connector = {
 	led_light = { type = "basic", intensity = 0, size = 0 }
 }
 
-local empty_connection_point = {
-	wire = { red = {0, 0}, green = {0, 0} },
-	shadow = { red = {0, 0}, green = {0, 0} }
-}
-
 local empty_circuit_connector_array = {
 	empty_circuit_connector, empty_circuit_connector, empty_circuit_connector,
 	empty_circuit_connector, empty_circuit_connector, empty_circuit_connector,
 	empty_circuit_connector, empty_circuit_connector
 }
 
-local empty_connection_point_array = {
-	empty_connection_point, empty_connection_point, empty_connection_point,
-	empty_connection_point, empty_connection_point, empty_connection_point,
-	empty_connection_point, empty_connection_point
+local pole_circuit_connections = {
+	{   -- north
+		wire =   { red = {  0.5,  -2.25 }, green = {  0.6,  -2.25 } },
+		shadow = { red = {  2.6,   0.0  }, green = {  2.7,   0.0  } }
+	},
+	{   -- northeast
+		wire =   { red = {  0.35, -2.05 }, green = {  0.45, -2.0  } },
+		shadow = { red = {  2.45,  0.3  }, green = {  2.55,  0.35 } }
+	},
+	{   -- east
+		wire =   { red = {  0.0,  -1.89 }, green = {  0.0,  -1.82 } },
+		shadow = { red = {  2.1,   0.46 }, green = {  2.1,   0.53 } }
+	},
+	{   -- southeast
+		wire =   { red = { -0.35, -2.05 }, green = { -0.45, -2.0  } },
+		shadow = { red = {  1.75,  0.3  }, green = {  1.65,  0.35 } }
+	},
+	{   -- south
+		wire =   { red = { -0.5,  -2.25 }, green = { -0.6,  -2.25 } },
+		shadow = { red = {  1.6,   0.0  }, green = {  1.5,   0.0  } }
+	},
+	{   -- southwest
+		wire =   { red = { -0.35, -2.5  }, green = { -0.45, -2.55  } },
+		shadow = { red = {  1.75, -0.15 }, green = {  1.65, -0.15 } }
+	},
+	{   -- west
+		wire =   { red = {  0.0,  -2.61 }, green = {  0.0,  -2.68 } },
+		shadow = { red = {  2.1,  -0.27 }, green = {  2.1,  -0.34 } }
+	},
+	{   -- northwest
+		wire =   { red = {  0.35, -2.5  }, green = {  0.45, -2.55 } },
+		shadow = { red = {  2.45, -0.15 }, green = {  2.55, -0.15 } }
+	}
+}
+
+local pole_circuit_connections_straight = {
+	pole_circuit_connections[1], pole_circuit_connections[3], 
+	pole_circuit_connections[5], pole_circuit_connections[7]
+}
+
+local pole_circuit_connections_diagonal = {
+	pole_circuit_connections[2], pole_circuit_connections[4], 
+	pole_circuit_connections[6], pole_circuit_connections[8]
 }
 
 local dummy_energy_source = {
@@ -61,7 +95,7 @@ local simple_pole_placer = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	drawing_box = {{-2.5, -6.0}, {2.5, 1.0}},
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -85,7 +119,7 @@ local signal_pole_placer = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	drawing_box = {{-2.5, -6.0}, {2.5, 1.0}},
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -109,7 +143,7 @@ local chain_pole_placer = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	drawing_box = {{-2.5, -6.0}, {2.5, 1.0}},
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -120,18 +154,17 @@ data:extend{simple_pole_placer, signal_pole_placer, chain_pole_placer}
 --==============================================================================
 -- Overhead Line Poles: Base entities
 
-local simple_pole = {
-	type = "rail-signal",
-	name = "ret-pole-base",
+local simple_pole_straight = {
+	type = "constant-combinator",
+	name = "ret-pole-base-straight",
 	icon = graphics .. "items/power-pole.png",
 	icon_size = 32,
-	animation = {
-		filename = graphics .. "entities/pole-base.png",
+	sprites = { sheet = {
+		filename = graphics .. "entities/pole-base-straight.png",
 		width = 48, height = 48,
-		frame_count = 1, direction_count = 8,
 		shift = util.by_pixel(0, 8)
-	},
-	flags = { "player-creation", "building-direction-8-way" },
+	}},
+	flags = { "player-creation" },
 	fast_replaceable_group = "rail-signal",
 	max_health = 100,
 	corpse = "small-remnants",
@@ -141,8 +174,40 @@ local simple_pole = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
-	circuit_connector_sprites = empty_circuit_connector_array
+	circuit_wire_connection_points = pole_circuit_connections_straight,
+	item_slot_count = 0,
+	activity_led_sprites = { sheet = {
+		filename = graphics .. "empty.png", width = 0.25, height = 1
+	}},
+	activity_led_light_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}}
+}
+
+local simple_pole_diagonal = {
+	type = "constant-combinator",
+	name = "ret-pole-base-diagonal",
+	icon = graphics .. "items/power-pole.png",
+	icon_size = 32,
+	sprites = { sheet = {
+		filename = graphics .. "entities/pole-base-diagonal.png",
+		width = 48, height = 48,
+		shift = util.by_pixel(0, 8)
+	}},
+	flags = { "player-creation" },
+	fast_replaceable_group = "rail-signal",
+	max_health = 100,
+	corpse = "small-remnants",
+	minable = { hardness = 0.2, mining_time = 0.5, result = "ret-pole-placer" },
+	placeable_by = { item = "ret-pole-placer", count = 1 },
+	collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
+	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
+	circuit_wire_max_distance = config.pole_max_wire_distance,
+	circuit_wire_connection_points = pole_circuit_connections_diagonal,
+	item_slot_count = 0,
+	activity_led_sprites = { sheet = {
+		filename = graphics .. "empty.png", width = 0.25, height = 1
+	}},
+	activity_led_light_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}}
 }
 
 local signal_pole = {
@@ -166,7 +231,7 @@ local signal_pole = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -192,13 +257,13 @@ local chain_pole = {
 	selection_box_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0} },
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
 -- Extend
 
-data:extend{simple_pole, signal_pole, chain_pole}
+data:extend{simple_pole_straight, simple_pole_diagonal, signal_pole, chain_pole}
 
 --==============================================================================
 -- Pole wire and power consumer
@@ -211,8 +276,7 @@ local pole_wire = {
 	flags = { "placeable-off-grid", "not-blueprintable", "not-deconstructable" },
 	collision_box = {{0, 0}, {0, 0}},
 	collision_mask = {},
-	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
-	drawing_box = {{-0.5, -0.5}, {0.5, 0.5}},
+	selection_box = {{-0.25, -0.25}, {0.25, 0.25}},
 	pictures = { 
 		filename = graphics .. "empty.png",
 		width = 1, height = 1, direction_count = 1
@@ -221,8 +285,8 @@ local pole_wire = {
 	maximum_wire_distance = config.pole_max_wire_distance,
 	supply_area_distance = config.pole_supply_area,
 	connection_points = { {
-		shadow = { copper = {2.0, 0.1}, green = {0.0, 0.0}, red = {0.0, 0.0} },
-		wire   = { copper = {0.0, -2.25}, green = {0.0, 0.0}, red = {0.0, 0.0} },
+		shadow = { copper = {2.1, 0.0}, green = {2.0, 0.0}, red = {2.2, 0.0} },
+		wire   = { copper = {0.0, -2.25}, green = {-0.1, -2.25}, red = {0.1, -2.25} },
 	} },
 	radius_visualisation_picture =
 	{
