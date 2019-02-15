@@ -117,20 +117,27 @@ function register_locomotive(event)
 	global.electric_locos[locomotive.unit_number] = locomotive
 end
 
+function add_rail(event)
+	update_poles_near_rail(event.created_entity)
+end
 
 script.on_event({
 		defines.events.on_built_entity,
 		defines.events.on_robot_built_entity
 	},
 	function (event)
-		local e = event.created_entity
-		if e.name == "ret-pole-placer" or
-		   e.name == "ret-signal-pole-placer" or
-		   e.name == "ret-chain-pole-placer" then
+		local n = event.created_entity.name
+
+		if n == "ret-pole-placer" or
+		   n == "ret-signal-pole-placer" or
+		   n == "ret-chain-pole-placer" then
 				create_pole(event)
 
-		elseif e.name == "ret-electric-locomotive" then
+		elseif n == "ret-electric-locomotive" then
 				register_locomotive(event)
+
+		elseif n == "straight-rail" or n == "curved-rail" then
+				add_rail(event)
 		end
 	end
 )
@@ -163,6 +170,12 @@ function deregister_locomotive(event)
 	global.electric_locos[event.entity.unit_number] = nil
 end
 
+function remove_rail(event)
+	local power_provider = global.power_for_rail[event.entity.unit_number]
+	if power_provider and power_provider.valid then
+		unpower_nearby_rails(event.entity)
+	end
+end
 
 script.on_event({
 		defines.events.on_entity_died,
@@ -170,14 +183,18 @@ script.on_event({
 		defines.events.on_robot_pre_mined
 	},
 	function (event)
-		local e = event.entity
-		if e.name == "ret-pole-base" or
-		   e.name == "ret-signal-pole-base" or
-		   e.name == "ret-chain-pole-base" then
+		local n = event.entity.name
+
+		if n == "ret-pole-base" or
+		   n == "ret-signal-pole-base" or
+		   n == "ret-chain-pole-base" then
 				destroy_pole(event)
 
-		elseif e.name == "ret-electric-locomotive" then
+		elseif n == "ret-electric-locomotive" then
 				deregister_locomotive(event)
+
+		elseif n == "straight-rail" or n == "curved-rail" then
+				remove_rail(event)
 		end
 	end
 )
@@ -190,18 +207,20 @@ function on_tick(event)
 
 	-- power all trains
 	if event.tick % 10 == 0 then
-		local fuel = game.item_prototypes["ret-dummy-fuel-1"]
+		local dummy_fuel = game.item_prototypes["ret-dummy-fuel-1"]
+		
 		for _, loco in pairs(global.electric_locos) do
-			loco.burner.currently_burning = fuel
-			local missing_energy = fuel.fuel_value - loco.burner.remaining_burning_fuel
+			local burner = loco.burner
+			burner.currently_burning = dummy_fuel
+			local missing_energy = dummy_fuel.fuel_value - burner.remaining_burning_fuel
 			local power_provider = find_power_provider(loco)
 			if power_provider then
 				local transfer = math.min(missing_energy, 
 								 math.min(power_provider.energy, 
 								 config.loco_max_energy_transfer_val))
 				if transfer > 0 then
-					loco.burner.remaining_burning_fuel =
-							loco.burner.remaining_burning_fuel + transfer
+					burner.remaining_burning_fuel =
+							burner.remaining_burning_fuel + transfer
 					power_provider.energy =
 							power_provider.energy - transfer
 				end

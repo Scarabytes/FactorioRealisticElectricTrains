@@ -73,8 +73,9 @@ function find_poles(rail)
 	return results
 end
 
-
-function check_curve_policy(start_pole, find_result)
+-- Checks whether a result of a pole search has the poles close enough to any
+-- curves in the path.
+function check_curve_policy(start_position, find_result)
 	local end_pole = find_result.pole
 	local path = find_result.path
 
@@ -98,7 +99,7 @@ function check_curve_policy(start_pole, find_result)
 				end
 				status = 1
 			else
-				if util.distance(start_pole.position, path[2].position) <
+				if util.distance(start_position, path[2].position) <
 					util.distance(rail.position, path[2].position) then
 					-- curve is not significant
 					straight_count_before = straight_count_before + 0.5
@@ -160,50 +161,10 @@ function check_curve_policy(start_pole, find_result)
 	end
 end
 
--- Searches along the rail in all possible directions for an overhead
--- line pole, starting from the given one. Returns a table of two
--- lists, one for successes and one for failures.
--- A failure occurs if the distance is a few tiles too long (further
--- distances are not reported at all) or a curve in the path forces
--- the poles to be closer together.
---
--- The "success" list contains results of the following structure:
--- {
---   pole = The pole that was reached within the distance limit	
---   path = All rails that lead to the pole
--- }
--- The "failure" list contains results of the following structure:
--- {
---   pole = A found pole that couldn't be reached
---	 path = All rails that were checked
---   curve = A curved rail that was too far away from the poles or
---           nil if the failure was caused by linear pole distance
--- } 
-function search_next_poles(start_pole, max_distance, ignore)
-	-- setup utility references
-	local surface = start_pole.surface
-
-	local start_direction = fix_pole_dir(start_pole)
-	local start_position = start_pole.position
-
-	-- find rails immediately adjacent to the pole
-	local begin = find_rails(start_pole)
-
-	-- setup lists used in the search process
+-- Executes the search for poles along a rail path.
+function run_search_for_poles(start_position, check_list, known_poles, known_rails, max_distance, no_sanity_check)
 	local results = {}
-	local check_list = {}
-	local known_rails = {}
-	local known_poles = {[start_pole.unit_number] = true}
-	for _, rail in pairs(begin) do
-		known_rails[rail.unit_number] = true
-		for _, dir in pairs(driving_dirs_for_rail(rail.name, rail.direction)) do
-			table.insert(check_list, {rail = rail, drive = dir, path = {rail}})
-		end
-	end
-	if ignore then
-		known_poles[ignore.unit_number] = true
-	end
-	
+
 	-- loop until the check_list is empty
 	while #check_list > 0 do
 		local check = check_list[1]
@@ -249,24 +210,24 @@ function search_next_poles(start_pole, max_distance, ignore)
 	local success = {}
 	local failure = {}
 
-	local start_wire = global.wire_for_pole[start_pole.unit_number]
-
 	for _, result in pairs(results) do
 		local successful = true
 
-		-- check if path contains curves that are too far away from poles
-		local curve_check = check_curve_policy(start_pole, result)
-		if not curve_check.pass then
-			table.insert(failure, {pole = result.pole, path = result.path, curve = curve_check.curve})
-			successful = false
-		end
+		if not no_sanity_check then
+			-- check if path contains curves that are too far away from poles
+			local curve_check = check_curve_policy(start_position, result)
+			if not curve_check.pass then
+				table.insert(failure, {pole = result.pole, path = result.path, curve = curve_check.curve})
+				successful = false
+			end
 
-		-- check actual distance between pole wires
-		local target_wire = global.wire_for_pole[result.pole.unit_number]
+			-- check actual distance between pole wires
+			local target_wire = global.wire_for_pole[result.pole.unit_number]
 
-		if successful and util.distance(start_wire.position, target_wire.position) > max_distance then
-			table.insert(failure, {pole = result.pole, path = result.path, curve = nil})
-			successful = false
+			if successful and util.distance(start_position, target_wire.position) > max_distance then
+				table.insert(failure, {pole = result.pole, path = result.path, curve = nil})
+				successful = false
+			end
 		end
 
 		if successful then
@@ -275,4 +236,70 @@ function search_next_poles(start_pole, max_distance, ignore)
 	end
 
 	return {success = success, failure = failure}
+end
+
+-- Searches along the rail in all possible directions for an overhead
+-- line pole, starting from the given one. Returns a table of two
+-- lists, one for successes and one for failures.
+-- A failure occurs if the distance is a few tiles too long (further
+-- distances are not reported at all) or a curve in the path forces
+-- the poles to be closer together.
+--
+-- The "success" list contains results of the following structure:
+-- {
+--   pole = The pole that was reached within the distance limit	
+--   path = All rails that lead to the pole
+-- }
+-- The "failure" list contains results of the following structure:
+-- {
+--   pole = A found pole that couldn't be reached
+--	 path = All rails that were checked
+--   curve = A curved rail that was too far away from the poles or
+--           nil if the failure was caused by linear pole distance
+-- } 
+function search_next_poles(start_pole, max_distance, ignore)
+	-- setup utility references
+	local surface = start_pole.surface
+
+	local start_direction = fix_pole_dir(start_pole)
+	local start_position = global.wire_for_pole[start_pole.unit_number].position
+
+	-- find rails immediately adjacent to the pole
+	local begin = find_rails(start_pole)
+
+	-- setup lists used in the search process
+	local results = {}
+	local check_list = {}
+	local known_rails = {}
+	local known_poles = {[start_pole.unit_number] = true}
+	for _, rail in pairs(begin) do
+		known_rails[rail.unit_number] = true
+		for _, dir in pairs(driving_dirs_for_rail(rail.name, rail.direction)) do
+			table.insert(check_list, {rail = rail, drive = dir, path = {rail}})
+		end
+	end
+	if ignore then
+		if ignore.name == "straight-rail" or ignore.name == "curved-rail" then
+			known_rails[ignore.unit_number] = true
+		else
+			known_poles[ignore.unit_number] = true
+		end
+	end
+	
+	return run_search_for_poles(start_position, check_list, known_poles, 
+		known_rails, max_distance)
+end
+
+-- Similar to search_next_poles, but starts from a rail and does not do any
+-- sanity checks
+function search_nearby_poles(start_rail, max_distance)
+	local check_list = {}
+	local known_rails = {[start_rail.unit_number] = true}
+	local known_poles = {}
+	for _, dir in pairs(driving_dirs_for_rail(start_rail.name, start_rail.direction)) do
+		table.insert(check_list, {rail = start_rail, drive = dir, path = {start_rail}})
+	end
+
+	return run_search_for_poles(start_rail.position, check_list, known_poles, 
+		known_rails, max_distance, true)
 end

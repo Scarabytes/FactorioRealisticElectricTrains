@@ -115,8 +115,7 @@ function display_failures(pole, search_results)
 	end
 end
 
--- options contains three booleans named show_failures, show_particles and 
--- rewire_adjacent
+-- options contains two booleans named show_failures and show_particles
 function install_pole(pole, options, ignore) 
 	local next_poles = search_next_poles(pole, config.pole_max_wire_distance, ignore)
 	if options.show_failures then display_failures(pole, next_poles) end
@@ -141,4 +140,22 @@ function find_power_provider(locomotive)
 		if power then return power end
 	end
 	return nil
+end
+
+function update_poles_near_rail(rail)
+	local nearby_poles = search_nearby_poles(rail, config.pole_max_wire_distance / 2 + 2)
+	for _, success in pairs(nearby_poles.success) do
+		install_pole(success.pole, {show_particles = enable_connect_particles})
+	end
+end
+
+function unpower_nearby_rails(rail)
+	local nearby_poles = search_nearby_poles(rail, config.pole_max_wire_distance / 2 + 2)
+	for _, success in pairs(nearby_poles.success) do
+		for _, spot in pairs(success.path) do
+			global.power_for_rail[spot.unit_number] = nil
+			if enable_connect_particles then display_powered_state(spot, true) end
+		end
+		install_pole(success.pole, {}, rail)
+	end
 end
