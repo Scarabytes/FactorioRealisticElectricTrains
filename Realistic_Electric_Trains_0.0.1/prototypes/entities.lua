@@ -29,6 +29,11 @@ local empty_connection_point_array = {
 	empty_connection_point, empty_connection_point
 }
 
+local empty_4connection_point_array = {
+	empty_connection_point, empty_connection_point, 
+	empty_connection_point, empty_connection_point
+}
+
 local dummy_energy_source = {
 	type = "electric",
 	buffer_capacity = "0J",
@@ -120,18 +125,17 @@ data:extend{simple_pole_placer, signal_pole_placer, chain_pole_placer}
 --==============================================================================
 -- Overhead Line Poles: Base entities
 
-local simple_pole = {
-	type = "rail-signal",
-	name = "ret-pole-base",
+local simple_pole_straight = {
+	type = "constant-combinator",
+	name = "ret-pole-base-straight",
 	icon = graphics .. "items/power-pole.png",
 	icon_size = 32,
-	animation = {
-		filename = graphics .. "entities/pole-base.png",
+	sprites = { sheet = {
+		filename = graphics .. "entities/pole-base-straight.png",
 		width = 48, height = 48,
-		frame_count = 1, direction_count = 8,
 		shift = util.by_pixel(0, 8)
-	},
-	flags = { "player-creation", "building-direction-8-way" },
+	}},
+	flags = { "player-creation" },
 	fast_replaceable_group = "rail-signal",
 	max_health = 100,
 	corpse = "small-remnants",
@@ -141,8 +145,40 @@ local simple_pole = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
-	circuit_connector_sprites = empty_circuit_connector_array
+	circuit_wire_connection_points = empty_4connection_point_array,
+	item_slot_count = 0,
+	activity_led_sprites = { sheet = {
+		filename = graphics .. "empty.png", width = 0.25, height = 1
+	}},
+	activity_led_light_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}}
+}
+
+local simple_pole_diagonal = {
+	type = "constant-combinator",
+	name = "ret-pole-base-diagonal",
+	icon = graphics .. "items/power-pole.png",
+	icon_size = 32,
+	sprites = { sheet = {
+		filename = graphics .. "entities/pole-base-diagonal.png",
+		width = 48, height = 48,
+		shift = util.by_pixel(0, 8)
+	}},
+	flags = { "player-creation" },
+	fast_replaceable_group = "rail-signal",
+	max_health = 100,
+	corpse = "small-remnants",
+	minable = { hardness = 0.2, mining_time = 0.5, result = "ret-pole-placer" },
+	placeable_by = { item = "ret-pole-placer", count = 1 },
+	collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
+	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
+	circuit_wire_max_distance = config.pole_max_wire_distance,
+	circuit_wire_connection_points = empty_4connection_point_array,
+	item_slot_count = 0,
+	activity_led_sprites = { sheet = {
+		filename = graphics .. "empty.png", width = 0.25, height = 1
+	}},
+	activity_led_light_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}}
 }
 
 local signal_pole = {
@@ -198,7 +234,7 @@ local chain_pole = {
 
 -- Extend
 
-data:extend{simple_pole, signal_pole, chain_pole}
+data:extend{simple_pole_straight, simple_pole_diagonal, signal_pole, chain_pole}
 
 --==============================================================================
 -- Pole wire and power consumer

@@ -404,24 +404,40 @@ do
 		}
 	}
 
-	function fix_pole_dir(pole)
-		if pole.name == "ret-pole-base" then
-			-- in a blueprint, the direction isn't even stored if it is zero.
-			if pole.direction then
-				return (pole.direction + 2) % 8
-			else
-				return 2
-			end
+	function fix_pole_name_and_dir(pole)
+		local name = pole.name
+		local dir = pole.direction
+		-- Zero directions in blueprints are not even stored.
+		if not dir then dir = 0 end
+		if name == "ret-pole-base-straight" then
+			return "ret-pole-base", dir
+		elseif name == "ret-pole-base-diagonal" then
+			return "ret-pole-base", dir + 1
 		else
-			return pole.direction
+			return name, dir
 		end
 	end
 
-	function fix_pole_build_dir(dir, type)
-		if not type or type == "ret-pole-placer" then
-			return (dir + 6) % 8
+	function fix_pole_dir(pole)
+		local dir = pole.direction
+		-- Zero directions in blueprints are not even stored.
+		if not dir then dir = 0 end
+		if pole.name == "ret-pole-base-diagonal" then
+			return dir + 1
 		else
 			return dir
+		end
+	end
+
+	function fix_pole_build_name_and_dir(name, dir)
+		if name == "ret-pole-base" then
+			if dir % 2 == 0 then
+				return "ret-pole-base-straight", dir
+			else
+				return "ret-pole-base-diagonal", dir - 1
+			end
+		else
+			return name, dir
 		end
 	end
 
