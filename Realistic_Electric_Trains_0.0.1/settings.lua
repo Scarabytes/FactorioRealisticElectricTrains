@@ -34,5 +34,14 @@ local enable_rewire_neighbours = {
 	order = "c"
 }
 
+local enable_circuit_wire = {
+	type = "bool-setting",
+	name = "ret-enable-circuit-wire",
+	setting_type = "runtime-global",
+	default_value = false,
+	order = "d"
+}
+
 data:extend{enable_failure_text, enable_connect_particles, 
-			max_pole_search_distance, enable_rewire_neighbours}
+			max_pole_search_distance, enable_rewire_neighbours,
+			enable_circuit_wire}

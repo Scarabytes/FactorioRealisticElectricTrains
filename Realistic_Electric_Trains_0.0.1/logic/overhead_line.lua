@@ -66,6 +66,12 @@ function rewire_pole(pole, search_results)
 	-- reconnect proper wires
 	for _, success in pairs(search_results.success) do
 		wire.connect_neighbour(global.wire_for_pole[success.pole.unit_number])
+		if enable_circuit_wire then
+			pole.connect_neighbour(
+				{wire = defines.wire_type.red, target_entity = success.pole})
+			pole.connect_neighbour(
+				{wire = defines.wire_type.green, target_entity = success.pole})
+		end
 	end
 end
 

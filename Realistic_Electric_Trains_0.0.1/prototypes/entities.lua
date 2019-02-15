@@ -29,6 +29,41 @@ local empty_connection_point_array = {
 	empty_connection_point, empty_connection_point
 }
 
+local pole_circuit_connections = {
+	{   -- north
+		wire =   { red = {  0.5,  -2.25 }, green = {  0.6,  -2.25 } },
+		shadow = { red = {  2.6,   0.0  }, green = {  2.7,   0.0  } }
+	},
+	{   -- northeast
+		wire =   { red = {  0.35, -2.05 }, green = {  0.45, -2.0  } },
+		shadow = { red = {  2.45,  0.3  }, green = {  2.55,  0.35 } }
+	},
+	{   -- east
+		wire =   { red = {  0.0,  -1.89 }, green = {  0.0,  -1.82 } },
+		shadow = { red = {  2.1,   0.46 }, green = {  2.1,   0.53 } }
+	},
+	{   -- southeast
+		wire =   { red = { -0.35, -2.05 }, green = { -0.45, -2.0  } },
+		shadow = { red = {  1.75,  0.3  }, green = {  1.65,  0.35 } }
+	},
+	{   -- south
+		wire =   { red = { -0.5,  -2.25 }, green = { -0.6,  -2.25 } },
+		shadow = { red = {  1.6,   0.0  }, green = {  1.5,   0.0  } }
+	},
+	{   -- southwest
+		wire =   { red = { -0.35, -2.5  }, green = { -0.45, -2.55  } },
+		shadow = { red = {  1.75, -0.15 }, green = {  1.65, -0.15 } }
+	},
+	{   -- west
+		wire =   { red = {  0.0,  -2.61 }, green = {  0.0,  -2.68 } },
+		shadow = { red = {  2.1,  -0.27 }, green = {  2.1,  -0.34 } }
+	},
+	{   -- northwest
+		wire =   { red = {  0.35, -2.5  }, green = {  0.45, -2.55 } },
+		shadow = { red = {  2.45, -0.15 }, green = {  2.55, -0.15 } }
+	}
+}
+
 local dummy_energy_source = {
 	type = "electric",
 	buffer_capacity = "0J",
@@ -61,7 +96,7 @@ local simple_pole_placer = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	drawing_box = {{-2.5, -6.0}, {2.5, 1.0}},
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -85,7 +120,7 @@ local signal_pole_placer = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	drawing_box = {{-2.5, -6.0}, {2.5, 1.0}},
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -109,7 +144,7 @@ local chain_pole_placer = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	drawing_box = {{-2.5, -6.0}, {2.5, 1.0}},
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -166,7 +201,7 @@ local signal_pole = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -192,7 +227,7 @@ local chain_pole = {
 	selection_box_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0} },
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array
 }
 
@@ -211,8 +246,7 @@ local pole_wire = {
 	flags = { "placeable-off-grid", "not-blueprintable", "not-deconstructable" },
 	collision_box = {{0, 0}, {0, 0}},
 	collision_mask = {},
-	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
-	drawing_box = {{-0.5, -0.5}, {0.5, 0.5}},
+	selection_box = {{-0.25, -0.25}, {0.25, 0.25}},
 	pictures = { 
 		filename = graphics .. "empty.png",
 		width = 1, height = 1, direction_count = 1
@@ -221,8 +255,8 @@ local pole_wire = {
 	maximum_wire_distance = config.pole_max_wire_distance,
 	supply_area_distance = config.pole_supply_area,
 	connection_points = { {
-		shadow = { copper = {2.0, 0.1}, green = {0.0, 0.0}, red = {0.0, 0.0} },
-		wire   = { copper = {0.0, -2.25}, green = {0.0, 0.0}, red = {0.0, 0.0} },
+		shadow = { copper = {2.1, 0.0}, green = {2.0, 0.0}, red = {2.2, 0.0} },
+		wire   = { copper = {0.0, -2.25}, green = {-0.1, -2.25}, red = {0.1, -2.25} },
 	} },
 	radius_visualisation_picture =
 	{
