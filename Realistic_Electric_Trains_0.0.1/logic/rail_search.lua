@@ -279,7 +279,11 @@ function search_next_poles(start_pole, max_distance, ignore)
 		end
 	end
 	if ignore then
-		known_poles[ignore.unit_number] = true
+		if ignore.name == "straight-rail" or ignore.name == "curved-rail" then
+			known_rails[ignore.unit_number] = true
+		else
+			known_poles[ignore.unit_number] = true
+		end
 	end
 	
 	return run_search_for_poles(start_position, check_list, known_poles, 

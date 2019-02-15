@@ -171,7 +171,10 @@ function deregister_locomotive(event)
 end
 
 function remove_rail(event)
-	global.power_for_rail[event.entity.unit_number] = nil
+	local power_provider = global.power_for_rail[event.entity.unit_number]
+	if power_provider and power_provider.valid then
+		unpower_nearby_rails(event.entity)
+	end
 end
 
 script.on_event({

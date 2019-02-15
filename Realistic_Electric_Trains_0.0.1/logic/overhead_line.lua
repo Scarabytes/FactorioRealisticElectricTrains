@@ -145,6 +145,17 @@ end
 function update_poles_near_rail(rail)
 	local nearby_poles = search_nearby_poles(rail, config.pole_max_wire_distance / 2 + 2)
 	for _, success in pairs(nearby_poles.success) do
-		install_pole(success.pole, {})
+		install_pole(success.pole, {show_particles = enable_connect_particles})
+	end
+end
+
+function unpower_nearby_rails(rail)
+	local nearby_poles = search_nearby_poles(rail, config.pole_max_wire_distance / 2 + 2)
+	for _, success in pairs(nearby_poles.success) do
+		for _, spot in pairs(success.path) do
+			global.power_for_rail[spot.unit_number] = nil
+			if enable_connect_particles then display_powered_state(spot, true) end
+		end
+		install_pole(success.pole, {}, rail)
 	end
 end
