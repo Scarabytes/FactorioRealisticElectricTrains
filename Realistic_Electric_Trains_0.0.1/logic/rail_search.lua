@@ -40,22 +40,23 @@ function find_adjacent_rails(rail, driving_direction)
 			   entity.position.x == pos.x and
 			   entity.position.y == pos.y and
 			   entity.direction == pos.dir then
-					table.insert(results, 
-							{rail = entity, drive = pos.drive})
+					table.insert(results, {rail = entity, drive = pos.drive})
 			end
 		end
 	end
 	return results
 end
 
+
+local valid_names = {
+	["ret-pole-base"] = true,
+	["ret-signal-pole-base"] = true,
+	["ret-chain-pole-base"] = true
+}
+
 -- Finds poles adjacent to the given rail.
 function find_poles(rail)
 	local positions = pole_pos_for_rail(rail.name, rail.position, rail.direction)
-	local valid_names = {
-		["ret-pole-base"] = true,
-		["ret-signal-pole-base"] = true,
-		["ret-chain-pole-base"] = true
-	}
 
 	local results = {}
 	for _, pos in pairs(positions) do
@@ -155,7 +156,13 @@ function check_curve_policy(start_pole, find_result)
 			straight_count_before <= 1 and straight_count_after <= 1 then
 				return { pass = true }
 		else
-				return { fail = true, curve = curve }
+				-- ignore test when it is obvious that the poles weren't meant
+				-- to connect anyway
+				if straight_count_before + straight_count_after < 8 then
+					return { fail = true, curve = curve }
+				else
+					return {}
+				end
 		end
 	end
 end
@@ -257,8 +264,10 @@ function search_next_poles(start_pole, max_distance, ignore)
 		-- check if path contains curves that are too far away from poles
 		local curve_check = check_curve_policy(start_pole, result)
 		if not curve_check.pass then
-			table.insert(failure, {pole = result.pole, path = result.path, curve = curve_check.curve})
 			successful = false
+			if curve_check.fail then
+				table.insert(failure, {pole = result.pole, path = result.path, curve = curve_check.curve})
+			end
 		end
 
 		-- check actual distance between pole wires
