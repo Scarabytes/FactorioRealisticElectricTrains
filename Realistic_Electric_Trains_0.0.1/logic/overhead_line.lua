@@ -26,9 +26,9 @@ function display_powered_state(rail, unpowered)
 end
 
 function mark_powered_rails(pole, search_results, show_particles)
-	for _, success in pairs(search_results.success) do
+	for _, success in ipairs(search_results.success) do
 		local other_pole = success.pole
-		for _, rail in pairs(success.path) do
+		for _, rail in ipairs(success.path) do
 			local d1 = util.distance(rail.position, pole.position)
 			local d2 = util.distance(rail.position, other_pole.position)
 			if d1 <= d2 then
@@ -66,8 +66,6 @@ function rewire_pole(pole, search_results)
 	-- reconnect proper wires
 	for _, success in pairs(search_results.success) do
 		wire.connect_neighbour(global.wire_for_pole[success.pole.unit_number])
-		-- TODO: Rebuild wires based on neighbours whenever an entity of type
-		-- electric pole is placed/deleted
 	end
 end
 
@@ -137,7 +135,7 @@ function find_power_provider(locomotive)
 	local entities = surface.find_entities(around_position(locomotive.position, 1))
 	for _, entity in pairs(entities) do
 		local power = global.power_for_rail[entity.unit_number]
-		if power then return power end
+		if power and power.valid then return power end
 	end
 	return nil
 end

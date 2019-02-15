@@ -281,8 +281,9 @@ script.on_event(defines.events.on_player_selected_area,
 		if e.item == "ret-pole-debugger" then
 			for _, entity in pairs(e.entities) do
 				if entity.name == "straight-rail" or entity.name == "curved-rail" then
-					local unpowered = global.power_for_rail[entity.unit_number] == nil
-					display_powered_state(entity, unpowered)
+					local power_provider = global.power_for_rail[entity.unit_number]
+					local powered = power_provider and power_provider.valid
+					display_powered_state(entity, not powered)
 				end
 			end 
 		end
