@@ -9,11 +9,10 @@ require("positions")
 -- to entity direction.
 function find_rails(pole)
 	local positions = rail_pos_for_pole(pole.position, fix_pole_dir(pole))
+	local entities = pole.surface.find_entities(around_position(pole.position, 4))
 
 	local results = {}
 	for _, pos in pairs(positions) do
-		local entities = pole.surface.find_entities(around_position(pos))
-
 		for _, entity in pairs(entities) do
 			if entity.name == pos.rail and
 			   entity.position.x == pos.x and
@@ -30,11 +29,11 @@ end
 function find_adjacent_rails(rail, driving_direction)
 	local positions = rail_pos_for_rail(rail.name, rail.position, 
 										rail.direction, driving_direction)
+	local entities = rail.surface.find_entities(
+										around_position(rail.position, 5.5))
 
 	local results = {}
 	for _, pos in pairs(positions) do
-		local entities = rail.surface.find_entities(around_position(pos))
-
 		for _, entity in pairs(entities) do
 			if entity.name == pos.rail and
 			   entity.position.x == pos.x and
@@ -49,7 +48,8 @@ end
 
 
 local valid_names = {
-	["ret-pole-base"] = true,
+	["ret-pole-base-straight"] = true,
+	["ret-pole-base-diagonal"] = true,
 	["ret-signal-pole-base"] = true,
 	["ret-chain-pole-base"] = true
 }
@@ -57,11 +57,10 @@ local valid_names = {
 -- Finds poles adjacent to the given rail.
 function find_poles(rail)
 	local positions = pole_pos_for_rail(rail.name, rail.position, rail.direction)
+	local entities = rail.surface.find_entities(around_position(rail.position, 4))
 
 	local results = {}
 	for _, pos in pairs(positions) do
-		local entities = rail.surface.find_entities(around_position(pos))
-
 		for _, entity in pairs(entities) do
 			if valid_names[entity.name] and
 			   entity.position.x == pos.x and
@@ -270,14 +269,12 @@ function search_next_poles(start_pole, max_distance, ignore)
 	-- setup utility references
 	local surface = start_pole.surface
 
-	local start_direction = fix_pole_dir(start_pole)
 	local start_position = global.wire_for_pole[start_pole.unit_number].position
 
 	-- find rails immediately adjacent to the pole
 	local begin = find_rails(start_pole)
 
 	-- setup lists used in the search process
-	local results = {}
 	local check_list = {}
 	local known_rails = {}
 	local known_poles = {[start_pole.unit_number] = true}
