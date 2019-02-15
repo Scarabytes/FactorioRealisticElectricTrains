@@ -12,26 +12,10 @@ local empty_circuit_connector = {
 	led_light = { type = "basic", intensity = 0, size = 0 }
 }
 
-local empty_connection_point = {
-	wire = { red = {0, 0}, green = {0, 0} },
-	shadow = { red = {0, 0}, green = {0, 0} }
-}
-
 local empty_circuit_connector_array = {
 	empty_circuit_connector, empty_circuit_connector, empty_circuit_connector,
 	empty_circuit_connector, empty_circuit_connector, empty_circuit_connector,
 	empty_circuit_connector, empty_circuit_connector
-}
-
-local empty_connection_point_array = {
-	empty_connection_point, empty_connection_point, empty_connection_point,
-	empty_connection_point, empty_connection_point, empty_connection_point,
-	empty_connection_point, empty_connection_point
-}
-
-local empty_4connection_point_array = {
-	empty_connection_point, empty_connection_point, 
-	empty_connection_point, empty_connection_point
 }
 
 local pole_circuit_connections = {
@@ -67,6 +51,16 @@ local pole_circuit_connections = {
 		wire =   { red = {  0.35, -2.5  }, green = {  0.45, -2.55 } },
 		shadow = { red = {  2.45, -0.15 }, green = {  2.55, -0.15 } }
 	}
+}
+
+local pole_circuit_connections_straight = {
+	pole_circuit_connections[1], pole_circuit_connections[3], 
+	pole_circuit_connections[5], pole_circuit_connections[7]
+}
+
+local pole_circuit_connections_diagonal = {
+	pole_circuit_connections[2], pole_circuit_connections[4], 
+	pole_circuit_connections[6], pole_circuit_connections[8]
 }
 
 local dummy_energy_source = {
@@ -180,7 +174,7 @@ local simple_pole_straight = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_4connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections_straight,
 	item_slot_count = 0,
 	activity_led_sprites = { sheet = {
 		filename = graphics .. "empty.png", width = 0.25, height = 1
@@ -208,7 +202,7 @@ local simple_pole_diagonal = {
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
-	circuit_wire_connection_points = empty_4connection_point_array,
+	circuit_wire_connection_points = pole_circuit_connections_diagonal,
 	item_slot_count = 0,
 	activity_led_sprites = { sheet = {
 		filename = graphics .. "empty.png", width = 0.25, height = 1
