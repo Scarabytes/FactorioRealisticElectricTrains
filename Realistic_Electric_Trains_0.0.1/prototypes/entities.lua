@@ -348,5 +348,6 @@ local electric_locomotive =
 electric_locomotive.burner.fuel_inventory_size = 0
 electric_locomotive.burner.smoke = nil
 electric_locomotive.reversing_power_modifier = 0.8
+electric_locomotive.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
 
 data:extend{electric_locomotive}
