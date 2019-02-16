@@ -264,10 +264,10 @@ local chain_pole = {
 	circuit_wire_connection_points = pole_circuit_connections,
 	circuit_connector_sprites = empty_circuit_connector_array,
 	rail_piece = data.raw["rail-chain-signal"]["rail-chain-signal"].rail_piece,
-    green_light = {intensity = 0.3, size = 4, color={r=0.6, g=1, b=0.1}},
-    orange_light = {intensity = 0.3, size = 4, color={r=0.8, g=0.7, b=0.4}},
+    green_light = {intensity = 0.3, size = 4, color={r=0.4, g=1.0, b=0.1}},
+    orange_light = {intensity = 0.3, size = 4, color={r=0.8, g=0.7, b=0.3}},
     red_light = {intensity = 0.3, size = 4, color={r=0.8, g=0.4, b=0.4}},
-    blue_light = {intensity = 0.3, size = 4, color={r=0.4, g=0.7, b=0.6}}
+    blue_light = {intensity = 0.3, size = 4, color={r=0.2, g=0.5, b=0.8}}
 }
 
 -- Extend
