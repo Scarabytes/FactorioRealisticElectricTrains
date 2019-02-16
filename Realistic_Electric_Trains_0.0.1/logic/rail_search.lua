@@ -187,7 +187,9 @@ function run_search_for_poles(start_position, check_list, known_poles, known_rai
 			for _, pole in pairs(poles) do
 				if not known_poles[pole.unit_number] then
 					search_adjacent = false
-					table.insert(results, { pole = pole, path = table.deepcopy(check.path)})
+					table.insert(results, { pole = pole, 
+							path = table.deepcopy(check.path), 
+							has_curve = check.has_curve})
 					known_poles[pole.unit_number] = true
 				end
 			end
@@ -200,17 +202,19 @@ function run_search_for_poles(start_position, check_list, known_poles, known_rai
 
 		if search_adjacent and 
 		   util.distance(start_position, check.rail.position) <= max_distance + max_pole_search_distance and
-		   #check.path * 2 <= max_distance + max_pole_search_distance then
+		   #check.path * 1.4 <= max_distance + max_pole_search_distance then
 				-- find adjacent rails and add them to the check_list
 				local rails = find_adjacent_rails(check.rail, check.drive)
 				for _, adjacent in pairs(rails) do
 					local rail = adjacent.rail
 					if not known_rails[rail.unit_number] then
+						local is_curve = rail.name == "curved-rail"
 						local drive = adjacent.drive
 						local path = table.deepcopy(check.path)
 						table.insert(path, rail)
 						table.insert(check_list, 
-									 {rail = rail, drive = drive, path = path})
+									 {rail = rail, drive = drive, path = path,
+									 has_curve = has_curve or is_curve})
 						known_rails[rail.unit_number] = true
 					end
 				end
@@ -228,25 +232,28 @@ function run_search_for_poles(start_position, check_list, known_poles, known_rai
 
 		if not no_sanity_check then
 			-- check if path contains curves that are too far away from poles
-			local curve_check = check_curve_policy(start_position, result)
-			if not curve_check.pass then
-				successful = false
-				if curve_check.fail then
-					table.insert(failure, {pole = result.pole, path = result.path, curve = curve_check.curve})
+			if result.has_curve then
+				local curve_check = check_curve_policy(start_position, result)
+				if not curve_check.pass then
+					successful = false
+					if curve_check.fail then
+						table.insert(failure, {pole = result.pole, path = result.path, curve = curve_check.curve})
+					end
 				end
 			end
 
 			-- check actual distance between pole wires
 			local target_wire = global.wire_for_pole[result.pole.unit_number]
 
-			if successful and util.distance(start_position, target_wire.position) > max_distance then
+			if successful and util.distance(start_position, target_wire.position) > max_distance + 0.2 then
 				table.insert(failure, {pole = result.pole, path = result.path, curve = nil})
 				successful = false
 			end
 		end
 
 		if successful then
-			table.insert(success, {pole = result.pole, path = result.path})
+			table.insert(success, {pole = result.pole, path = result.path, 
+									has_curve = result.has_curve})
 		end
 	end
 
@@ -286,9 +293,10 @@ function search_next_poles(start_pole, max_distance, ignore)
 	local known_rails = {}
 	local known_poles = {[start_pole.unit_number] = true}
 	for _, rail in pairs(begin) do
+		local has_curve = rail.name == "curved-rail"
 		known_rails[rail.unit_number] = true
 		for _, dir in pairs(driving_dirs_for_rail(rail.name, rail.direction)) do
-			table.insert(check_list, {rail = rail, drive = dir, path = {rail}})
+			table.insert(check_list, {rail = rail, drive = dir, path = {rail}, has_curve = has_curve})
 		end
 	end
 	if ignore then
@@ -310,7 +318,8 @@ function search_nearby_poles(start_rail, max_distance)
 	local known_rails = {[start_rail.unit_number] = true}
 	local known_poles = {}
 	for _, dir in pairs(driving_dirs_for_rail(start_rail.name, start_rail.direction)) do
-		table.insert(check_list, {rail = start_rail, drive = dir, path = {start_rail}})
+		local has_curve = start_rail.name == "curved-rail"
+		table.insert(check_list, {rail = start_rail, drive = dir, path = {start_rail}, has_curve = has_curve})
 	end
 
 	return run_search_for_poles(start_rail.position, check_list, known_poles, 

@@ -232,7 +232,11 @@ local signal_pole = {
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
 	circuit_wire_connection_points = pole_circuit_connections,
-	circuit_connector_sprites = empty_circuit_connector_array
+	circuit_connector_sprites = empty_circuit_connector_array,
+	rail_piece = data.raw["rail-signal"]["rail-signal"].rail_piece,
+    green_light = {intensity = 0.2, size = 4, color={g=1}},
+    orange_light = {intensity = 0.2, size = 4, color={r=1, g=0.5}},
+    red_light = {intensity = 0.2, size = 4, color={r=1}}
 }
 
 local chain_pole = {
@@ -258,7 +262,12 @@ local chain_pole = {
 	collision_mask = { "item-layer", "floor-layer", "train-layer", "player-layer" },
 	circuit_wire_max_distance = config.pole_max_wire_distance,
 	circuit_wire_connection_points = pole_circuit_connections,
-	circuit_connector_sprites = empty_circuit_connector_array
+	circuit_connector_sprites = empty_circuit_connector_array,
+	rail_piece = data.raw["rail-chain-signal"]["rail-chain-signal"].rail_piece,
+    green_light = {intensity = 0.3, size = 4, color={r=0.6, g=1, b=0.1}},
+    orange_light = {intensity = 0.3, size = 4, color={r=0.8, g=0.7, b=0.4}},
+    red_light = {intensity = 0.3, size = 4, color={r=0.8, g=0.4, b=0.4}},
+    blue_light = {intensity = 0.3, size = 4, color={r=0.4, g=0.7, b=0.6}}
 }
 
 -- Extend
@@ -282,7 +291,7 @@ local pole_wire = {
 		width = 1, height = 1, direction_count = 1
 	},
 	selection_priority = 100,
-	maximum_wire_distance = config.pole_max_wire_distance,
+	maximum_wire_distance = config.pole_max_wire_distance + 0.5,
 	supply_area_distance = config.pole_supply_area,
 	connection_points = { {
 		shadow = { copper = {2.1, 0.0}, green = {2.0, 0.0}, red = {2.2, 0.0} },

@@ -18,18 +18,22 @@ script.on_init(
 
 -- settings cache
 
-enable_failure_text = settings.global["ret-enable-failure-text"].value
 enable_connect_particles = settings.global["ret-enable-connect-particles"].value
-max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
-enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+enable_failure_text = settings.global["ret-enable-failure-text"].value
+enable_zigzag_wire = settings.global["ret-enable-zigzag-wire"].value
+enable_zigzag_vertical_only = settings.global["ret-enable-zigzag-vertical-only"].value
 enable_circuit_wire = settings.global["ret-enable-circuit-wire"].value
+enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
 
 function cache_settings()
-	enable_failure_text = settings.global["ret-enable-failure-text"].value
 	enable_connect_particles = settings.global["ret-enable-connect-particles"].value
-	max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
-	enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+	enable_failure_text = settings.global["ret-enable-failure-text"].value
+	enable_zigzag_wire = settings.global["ret-enable-zigzag-wire"].value
+	enable_zigzag_vertical_only = settings.global["ret-enable-zigzag-vertical-only"].value
 	enable_circuit_wire = settings.global["ret-enable-circuit-wire"].value
+	enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+	max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
 end
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, cache_settings)
