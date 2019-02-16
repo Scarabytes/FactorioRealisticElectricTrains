@@ -18,18 +18,22 @@ script.on_init(
 
 -- settings cache
 
-enable_failure_text = settings.global["ret-enable-failure-text"].value
 enable_connect_particles = settings.global["ret-enable-connect-particles"].value
-max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
-enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+enable_failure_text = settings.global["ret-enable-failure-text"].value
+enable_zigzag_wire = settings.global["ret-enable-zigzag-wire"].value
+enable_zigzag_vertical_only = settings.global["ret-enable-zigzag-vertical-only"].value
 enable_circuit_wire = settings.global["ret-enable-circuit-wire"].value
+enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
 
 function cache_settings()
-	enable_failure_text = settings.global["ret-enable-failure-text"].value
 	enable_connect_particles = settings.global["ret-enable-connect-particles"].value
-	max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
-	enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+	enable_failure_text = settings.global["ret-enable-failure-text"].value
+	enable_zigzag_wire = settings.global["ret-enable-zigzag-wire"].value
+	enable_zigzag_vertical_only = settings.global["ret-enable-zigzag-vertical-only"].value
 	enable_circuit_wire = settings.global["ret-enable-circuit-wire"].value
+	enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
+	max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value
 end
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, cache_settings)
@@ -206,30 +210,41 @@ script.on_event({
 
 -- Tick handler
 
-function on_tick(event)
+do
 
-	-- power all trains
-	if event.tick % 10 == 0 then
-		local dummy_fuel = game.item_prototypes["ret-dummy-fuel-1"]
-		
-		for _, loco in pairs(global.electric_locos) do
-			local burner = loco.burner
-			burner.currently_burning = dummy_fuel
-			local missing_energy = dummy_fuel.fuel_value - burner.remaining_burning_fuel
-			local power_provider = find_power_provider(loco)
-			if power_provider then
-				local transfer = math.min(missing_energy, 
-								 math.min(power_provider.energy, 
-								 config.loco_max_energy_transfer_val))
-				if transfer > 0 then
-					burner.remaining_burning_fuel =
-							burner.remaining_burning_fuel + transfer
-					power_provider.energy =
-							power_provider.energy - transfer
+	local dummy_fuel
+	local dummy_fuel_value
+	local max_transfer = config.loco_max_energy_transfer_val
+
+	function on_tick(event)
+
+		if event.tick % 10 == 0 then
+
+			if not dummy_fuel then
+				dummy_fuel = game.item_prototypes["ret-dummy-fuel-1"]
+				dummy_fuel_value = dummy_fuel.fuel_value
+			end
+
+			-- power all trains
+			for _, loco in pairs(global.electric_locos) do
+				local burner = loco.burner
+				burner.currently_burning = dummy_fuel
+				local missing_energy = dummy_fuel_value - burner.remaining_burning_fuel
+				local power_provider = find_power_provider(loco)
+				if power_provider then
+					local transfer = math.min(missing_energy, 
+									 math.min(power_provider.energy, max_transfer))
+					if transfer > 0 then
+						burner.remaining_burning_fuel =
+								burner.remaining_burning_fuel + transfer
+						power_provider.energy =
+								power_provider.energy - transfer
+					end
 				end
 			end
 		end
 	end
+
 end
 
 script.on_event(defines.events.on_tick, on_tick)
@@ -297,5 +312,20 @@ script.on_event(defines.events.on_player_selected_area,
 				end
 			end 
 		end
+	end
+)
+
+--==============================================================================
+
+-- Commands
+
+commands.add_command("print_electric_train_count", 
+	"Prints how many electric trains are currently registered in the Realistic Electric Trains mod.",
+	function()
+		local count = 0
+		for _, _ in pairs(global.electric_locos) do
+			count = count + 1
+		end
+		game.print(string.format("Total Trains: %d", count))
 	end
 )

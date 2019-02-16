@@ -119,11 +119,44 @@ function display_failures(pole, search_results)
 	end
 end
 
+-- moves the wires so that a zigzag pattern is created
+function zigzag_pole_wire(start_pole, search_results)
+	local other_nonstandard = 0
+	local has_straight = false
+	local has_vertical
+
+	for _, success in pairs(search_results.success) do
+		if not success.has_curve then
+			has_straight = true
+			has_vertical = success.path[1].direction == defines.direction.north
+			local pole = success.pole
+			local mode = find_wire_mode(pole, global.wire_for_pole[pole.unit_number])
+			if mode ~= 2 then
+				if other_nonstandard == 0 then
+					other_nonstandard = mode
+				elseif other_nonstandard ~= mode then
+					other_nonstandard = 2
+				end
+			end
+		end
+	end
+
+	local invert = {[0] = 3, [1] = 3, [2] = 2, [3] = 1}
+
+	if has_straight and (has_vertical or not enable_zigzag_vertical_only) then
+		local wire = global.wire_for_pole[start_pole.unit_number]
+		local position = wire_pos_for_pole(start_pole.position, 
+							fix_pole_dir(start_pole), invert[other_nonstandard])
+		wire.teleport(position)
+	end
+end
+
 -- options contains two booleans named show_failures and show_particles
 function install_pole(pole, options, ignore) 
 	local next_poles = search_next_poles(pole, config.pole_max_wire_distance, ignore)
 	if options.show_failures then display_failures(pole, next_poles) end
 	mark_powered_rails(pole, next_poles, options.show_particles)
+	if enable_zigzag_wire then zigzag_pole_wire(pole, next_poles) end
 	rewire_pole(pole, next_poles)
 end
 
@@ -137,10 +170,11 @@ end
 
 function find_power_provider(locomotive)
 	local surface = locomotive.surface
-
 	local entities = surface.find_entities(around_position(locomotive.position, 1))
+	local lookup = global.power_for_rail
+
 	for _, entity in pairs(entities) do
-		local power = global.power_for_rail[entity.unit_number]
+		local power = lookup[entity.unit_number]
 		if power and power.valid then return power end
 	end
 	return nil

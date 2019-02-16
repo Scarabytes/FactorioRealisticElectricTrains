@@ -22,14 +22,15 @@ do
 	-- Note that a signal for driving northbound has the direction south
 
 	local pole_to_wire = {
-		[n]  = { x =  1.75, y =  0.0  },
-		[ne] = { x =  1.25, y =  0.9  },
-		[e]  = { x =  0.0,  y =  1.25 },
-		[se] = { x = -1.25, y =  0.9  },
-		[s]  = { x = -1.75, y =  0.0  },
-		[sw] = { x = -1.25, y = -0.9  },
-		[w]  = { x =  0.0,  y = -1.25 },
-		[nw] = { x =  1.25, y = -0.9  }
+	    --        narrow                standard              wide
+		[n]  = { {x =  1.2, y =  0.0}, {x =  1.5, y =  0.0}, {x =  1.8, y =  0.0} },
+		[ne] = { {x =  0.8, y =  0.6}, {x =  1.1, y =  0.8}, {x =  1.4, y =  1.0} },
+		[e]  = { {x =  0.0, y =  1.0}, {x =  0.0, y =  1.2}, {x =  0.0, y =  1.4} },
+		[se] = { {x = -0.8, y =  0.6}, {x = -1.1, y =  0.8}, {x = -1.4, y =  1.0} },
+		[s]  = { {x = -1.2, y =  0.0}, {x = -1.5, y =  0.0}, {x = -1.8, y =  0.0} },
+		[sw] = { {x = -0.8, y = -0.6}, {x = -1.1, y = -0.8}, {x = -1.4, y = -1.0} },
+		[w]  = { {x =  0.0, y = -1.0}, {x =  0.0, y = -1.2}, {x =  0.0, y = -1.4} },
+		[nw] = { {x =  0.8, y = -0.6}, {x =  1.1, y = -0.8}, {x =  1.4, y = -1.0} }
 	}
 
 	local pole_to_rail = {
@@ -441,9 +442,28 @@ do
 		end
 	end
 
-	function wire_pos_for_pole(pos, dir)
-		local l = pole_to_wire[dir]
+	function wire_pos_for_pole(pos, dir, mode)
+		if not mode then mode = 2 end
+		local l = pole_to_wire[dir][mode]
 		return { x = pos.x + l.x, y = pos.y + l.y }
+	end
+
+	function find_wire_mode(pole, wire)
+		local dir = fix_pole_dir(pole)
+		local dx = wire.position.x - pole.position.x
+		local dy = wire.position.y - pole.position.y
+
+		local function approx(x, y)
+			return math.abs(x - y) < 0.01
+		end
+
+		for mode = 1,3 do
+			if approx(pole_to_wire[dir][mode].x, dx) and 
+			   approx(pole_to_wire[dir][mode].y, dy) then
+					return mode
+			end
+		end
+		return 2 -- standard
 	end
 
 	function pole_pos_for_rail(rail_type, rail_pos, rail_dir)
