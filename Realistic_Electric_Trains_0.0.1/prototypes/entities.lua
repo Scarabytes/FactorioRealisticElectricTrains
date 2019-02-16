@@ -312,7 +312,7 @@ local pole_power = {
 		type = "electric",
 		buffer_capacity = config.pole_power_buffer,
 		usage_priority = "secondary-input",
-		input_flow_limit = "6MW"
+		input_flow_limit = config.pole_flow_limit
 	}
 }
 

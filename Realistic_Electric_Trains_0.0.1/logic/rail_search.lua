@@ -158,7 +158,7 @@ function check_curve_policy(start_position, find_result)
 		else
 				-- ignore test when it is obvious that the poles weren't meant
 				-- to connect anyway
-				if straight_count_before + straight_count_after < 8 then
+				if straight_count_before + straight_count_after < 4 then
 					return { fail = true, curve = curve }
 				else
 					return {}
@@ -170,6 +170,8 @@ end
 -- Executes the search for poles along a rail path.
 function run_search_for_poles(start_position, check_list, known_poles, known_rails, max_distance, no_sanity_check)
 	local results = {}
+
+	local begin = #check_list
 
 	-- loop until the check_list is empty
 	while #check_list > 0 do
@@ -190,6 +192,11 @@ function run_search_for_poles(start_position, check_list, known_poles, known_rai
 				end
 			end
 		end
+
+		if begin > 0 then
+			search_adjacent = true
+		end
+		begin = begin - 1
 
 		if search_adjacent and 
 		   util.distance(start_position, check.rail.position) <= max_distance + max_pole_search_distance and

@@ -137,10 +137,11 @@ end
 
 function find_power_provider(locomotive)
 	local surface = locomotive.surface
-
 	local entities = surface.find_entities(around_position(locomotive.position, 1))
+	local lookup = global.power_for_rail
+
 	for _, entity in pairs(entities) do
-		local power = global.power_for_rail[entity.unit_number]
+		local power = lookup[entity.unit_number]
 		if power and power.valid then return power end
 	end
 	return nil
