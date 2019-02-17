@@ -5,8 +5,8 @@ data:extend {
 {
 	type = "technology",
 	name = "ret-electric-locomotives",
-	icon_size = 32, -- 128
-	icon = graphics .. "marker.png",
+	icon_size = 128,
+	icon = graphics .. "technology/electric-trains.png",
 	effects = {
 		{ type = "unlock-recipe", recipe = "ret-electric-locomotive" },
 		{ type = "unlock-recipe", recipe = "ret-power-pole" },
