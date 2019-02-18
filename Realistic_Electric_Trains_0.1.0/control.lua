@@ -99,6 +99,7 @@ function create_pole(event)
 
 	-- this defaults to 40kJ for whatever reason...
 	power.electric_buffer_size = config.pole_power_buffer_val
+	power.energy = config.pole_power_buffer_val
 
 
 	-- store objects for fetching later

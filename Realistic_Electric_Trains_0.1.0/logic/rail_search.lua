@@ -214,7 +214,7 @@ function run_search_for_poles(start_position, check_list, known_poles, known_rai
 						table.insert(path, rail)
 						table.insert(check_list, 
 									 {rail = rail, drive = drive, path = path,
-									 has_curve = has_curve or is_curve})
+									 has_curve = check.has_curve or is_curve})
 						known_rails[rail.unit_number] = true
 					end
 				end
