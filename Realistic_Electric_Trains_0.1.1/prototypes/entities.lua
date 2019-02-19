@@ -319,9 +319,9 @@ local pole_power = {
 	}},
 	energy_source = {
 		type = "electric",
-		buffer_capacity = config.pole_power_buffer,
+		buffer_capacity = toJ(config.pole_power_buffer),
 		usage_priority = "secondary-input",
-		input_flow_limit = config.pole_flow_limit
+		input_flow_limit = toW(config.pole_flow_limit)
 	}
 }
 
@@ -422,5 +422,6 @@ electric_locomotive.burner.fuel_inventory_size = 0
 electric_locomotive.burner.smoke = nil
 electric_locomotive.reversing_power_modifier = 0.8
 electric_locomotive.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
+electric_locomotive.max_power = toW(config.locomotive_power)
 
 data:extend{electric_locomotive}
