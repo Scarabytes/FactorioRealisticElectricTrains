@@ -58,6 +58,16 @@ local max_pole_search_distance = {
 	order = "c"
 }
 
+local ticks_per_update = {
+	type = "int-setting",
+	name = "ret-ticks-per-update",
+	setting_type = "startup",
+	default_value = 60,
+	min_value = 10,
+	max_value = 600,
+	order = "a"
+}
+
 data:extend{enable_connect_particles, enable_failure_text, 
 			enable_circuit_wire, enable_zigzag_wire, enable_zigzag_vertical_only,
-			enable_rewire_neighbours, max_pole_search_distance}
+			enable_rewire_neighbours, max_pole_search_distance, ticks_per_update}

@@ -16,7 +16,21 @@ script.on_init(
 	end
 )
 
+-- update the electric buffer size for all energy consumers when the settings
+-- were changed
+script.on_configuration_changed(
+	function(e)
+		for _, power in pairs(global.power_for_pole) do
+			local missing_energy = power.electric_buffer_size - power.energy
+			power.electric_buffer_size = config.pole_power_buffer
+			power.energy = config.pole_power_buffer - missing_energy
+		end
+	end
+)
+
 -- settings cache
+
+ticks_per_update = settings.startup["ret-ticks-per-update"].value
 
 enable_connect_particles = settings.global["ret-enable-connect-particles"].value
 enable_failure_text = settings.global["ret-enable-failure-text"].value
@@ -98,7 +112,8 @@ function create_pole(event)
 
 
 	-- this defaults to 40kJ for whatever reason...
-	power.electric_buffer_size = config.pole_power_buffer_val
+	power.electric_buffer_size = config.pole_power_buffer
+	power.energy = config.pole_power_buffer
 
 
 	-- store objects for fetching later
@@ -214,11 +229,11 @@ do
 
 	local dummy_fuel
 	local dummy_fuel_value
-	local max_transfer = config.loco_max_energy_transfer_val
+	local max_transfer = config.locomotive_power / 60 * ticks_per_update
 
 	function on_tick(event)
 
-		if event.tick % 10 == 0 then
+		if event.tick % ticks_per_update == 0 then
 
 			if not dummy_fuel then
 				dummy_fuel = game.item_prototypes["ret-dummy-fuel-1"]
