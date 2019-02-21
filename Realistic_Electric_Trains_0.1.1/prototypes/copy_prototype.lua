@@ -1,11 +1,9 @@
 --copy_prototype.lua
 
-function copy_prototype(type, name, new_name)
-	if not data.raw[type][name] then 
-		error("Prototype "..type..":"..name.." doesn't exist") 
-	end
+require("util")
 
-	local p = table.deepcopy(data.raw[type][name])
+function copy_table(data, new_name)
+	local p = table.deepcopy(data)
 	p.name = new_name
 
 	if p.minable and p.minable.result then
@@ -29,4 +27,14 @@ function copy_prototype(type, name, new_name)
 	end
 
 	return p
+end
+
+function copy_prototype(type, name, new_name)
+	local raw = data.raw[type][name]
+
+	if not raw then 
+		error("Prototype "..type..":"..name.." doesn't exist") 
+	end
+
+	return copy_table(raw, new_name)
 end

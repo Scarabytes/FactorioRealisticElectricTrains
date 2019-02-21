@@ -4,7 +4,8 @@ require("util")
 require("config")
 require("rail_search")
 
-function display_powered_state(rail, unpowered)
+-- Displays particles on the rail according to the powered parameter
+function display_powered_state(rail, powered)
 	local surface = rail.surface
 
 	local e = surface.find_entity("ret-disconnected-particle", rail.position)
@@ -12,8 +13,8 @@ function display_powered_state(rail, unpowered)
 	e = surface.find_entity("ret-connected-particle", rail.position)
 	if e then e.destroy() end
 
-	local particle = "ret-connected-particle"
-	if unpowered then particle = "ret-disconnected-particle" end
+	local particle = "ret-disconnected-particle"
+	if powered then particle = "ret-connected-particle" end
 
 	surface.create_entity {
 		name = particle,
@@ -25,6 +26,7 @@ function display_powered_state(rail, unpowered)
 	}
 end
 
+-- Marks all rails in the successful search results as powered 
 function mark_powered_rails(pole, search_results, show_particles)
 	for _, success in ipairs(search_results.success) do
 		local other_pole = success.pole
@@ -37,23 +39,25 @@ function mark_powered_rails(pole, search_results, show_particles)
 				global.power_for_rail[rail.unit_number] = global.power_for_pole[other_pole.unit_number]	
 			end
 			if show_particles then
-				display_powered_state(rail)
-			end
-		end
-	end
-end
-
-function remove_powered_rails(search_results, show_particles)
-	for _, success in pairs(search_results.success) do
-		for _, rail in pairs(success.path) do
-			global.power_for_rail[rail.unit_number] = nil
-			if show_particles then
 				display_powered_state(rail, true)
 			end
 		end
 	end
 end
 
+-- Marks all rails in the successful search results as unpowered
+function remove_powered_rails(search_results, show_particles)
+	for _, success in pairs(search_results.success) do
+		for _, rail in pairs(success.path) do
+			global.power_for_rail[rail.unit_number] = nil
+			if show_particles then
+				display_powered_state(rail, false)
+			end
+		end
+	end
+end
+
+-- Deletes all copper wires to other poles and reconnects only neighboring poles
 function rewire_pole(pole, search_results)
 	-- disconnect all wires to neighbour overhead lines
 	local wire = global.wire_for_pole[pole.unit_number]
@@ -75,6 +79,7 @@ function rewire_pole(pole, search_results)
 	end
 end
 
+-- Calls rewire_pole on all the neighbours of this pole
 function rewire_neighbours(pole)
 	local search_results = search_next_poles(pole, config.pole_max_wire_distance)
 	for _, success in pairs(search_results.success) do
@@ -83,10 +88,11 @@ function rewire_neighbours(pole)
 	end
 end
 
+-- Displays a message for all failed search_results
 function display_failures(pole, search_results)
 	for _, failure in pairs(search_results.failure) do 
 		if failure.curve then
-			local pos = failure.curve.position
+			local pos = failure.pole.position
 			failure.pole.surface.create_entity {
 				name = "flying-text",
 				position = pos,
@@ -119,7 +125,7 @@ function display_failures(pole, search_results)
 	end
 end
 
--- moves the wires so that a zigzag pattern is created
+-- Moves the wires so that a zigzag pattern is created
 function zigzag_pole_wire(start_pole, search_results)
 	local other_nonstandard = 0
 	local has_straight = false
@@ -151,7 +157,8 @@ function zigzag_pole_wire(start_pole, search_results)
 	end
 end
 
--- options contains two booleans named show_failures and show_particles
+-- Powers rails up to the next poles. Options may contain show_failures and/or
+-- show_particles
 function install_pole(pole, options, ignore) 
 	local next_poles = search_next_poles(pole, config.pole_max_wire_distance, ignore)
 	if options.show_failures then display_failures(pole, next_poles) end
@@ -160,6 +167,7 @@ function install_pole(pole, options, ignore)
 	rewire_pole(pole, next_poles)
 end
 
+-- Unpowers rails up to the next poles.
 function uninstall_pole(pole, show_particles)
 	local next_poles = search_next_poles(pole, config.pole_max_wire_distance)
 	remove_powered_rails(next_poles, show_particles)
@@ -168,6 +176,7 @@ function uninstall_pole(pole, show_particles)
 	end
 end
 
+-- Returns a power provider for the given locomotive or nil if none was found
 function find_power_provider(locomotive)
 	local surface = locomotive.surface
 	local entities = surface.find_entities(around_position(locomotive.position, 1))
@@ -180,6 +189,7 @@ function find_power_provider(locomotive)
 	return nil
 end
 
+-- Installs poles next to the given rail entity
 function update_poles_near_rail(rail)
 	local nearby_poles = search_nearby_poles(rail, config.pole_max_wire_distance / 2 + 2)
 	for _, success in pairs(nearby_poles.success) do
@@ -187,6 +197,7 @@ function update_poles_near_rail(rail)
 	end
 end
 
+-- Unpowers the section of rail up to the next poles.
 function unpower_nearby_rails(rail)
 	local nearby_poles = search_nearby_poles(rail, config.pole_max_wire_distance / 2 + 2)
 	for _, success in pairs(nearby_poles.success) do

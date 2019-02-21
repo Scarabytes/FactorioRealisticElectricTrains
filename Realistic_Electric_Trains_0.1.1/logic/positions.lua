@@ -2,7 +2,6 @@
 
 require("util")
 
-
 do
 
 	local n  = defines.direction.north
