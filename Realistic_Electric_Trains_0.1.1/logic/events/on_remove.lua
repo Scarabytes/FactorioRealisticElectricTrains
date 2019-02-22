@@ -24,7 +24,13 @@ do
 
 	-- Removes a locomotive from the global table
 	function deregister_locomotive(locomotive)
-		global.electric_locos[locomotive.unit_number] = nil
+		local id = locomotive.unit_number
+		for n, loco in ipairs(global.electric_locos) do
+			if loco.unit_number == id then
+				table.remove(global.electric_locos, n)
+				break
+			end
+		end
 	end
 
 	-- Unpowers a track segment when a rail is removed
