@@ -125,8 +125,10 @@ pole_child_template = {
 	type = "electric-energy-interface",
 	icon = graphics .. "items/pole-wire.png",
 	icon_size = 32,
-	flags = { "placeable-off-grid", "not-blueprintable", "not-deconstructable" },
-	collision_mask = {}
+	flags = { "player-creation", "placeable-off-grid", "not-deconstructable" },
+	collision_mask = {},
+	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+	selection_priority = 25,
 }
 
 function make_particle(name, picture)

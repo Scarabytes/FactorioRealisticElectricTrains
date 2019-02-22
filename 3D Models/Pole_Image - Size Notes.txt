@@ -8,4 +8,4 @@ Object center:       19:143
 Cosmetic shift:       0: 8
 Total shift by pixel:45:55
 
-Frames: 2 times 2*1 - with and without base
+2 single images - straight and diagonal

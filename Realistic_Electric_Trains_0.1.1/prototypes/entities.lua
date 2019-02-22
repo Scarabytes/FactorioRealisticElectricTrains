@@ -117,13 +117,29 @@ local pole_wire = {
 
 
 
-local pole_power = copy_table(pole_child_template, "ret-pole-energy")
+local pole_power_straight = copy_table(pole_child_template, "ret-pole-energy-straight")
 
-pole_power.pictures = { sheet = {
-		filename = graphics .. "entities/pole-image.png",
-		width = 128, height = 160, shift = util.by_pixel(45, -55), frames = 2
-	}}
-pole_power.energy_source = {
+pole_power_straight.picture = {
+		filename = graphics .. "entities/pole-straight.png",
+		width = 128, height = 160, shift = util.by_pixel(45, -55)
+	}
+pole_power_straight.placeable_by = { item = "ret-dummy-pole-energy", count = 1}
+pole_power_straight.energy_source = {
+		type = "electric", usage_priority = "secondary-input",
+		buffer_capacity = toJ(config.pole_power_buffer),
+		input_flow_limit = toW(config.pole_flow_limit)
+	}
+
+
+
+local pole_power_diagonal = copy_table(pole_child_template, "ret-pole-energy-diagonal")
+
+pole_power_diagonal.picture = {
+		filename = graphics .. "entities/pole-diagonal.png",
+		width = 128, height = 160, shift = util.by_pixel(45, -55)
+	}
+pole_power_diagonal.placeable_by = { item = "ret-dummy-pole-energy", count = 1}
+pole_power_diagonal.energy_source = {
 		type = "electric", usage_priority = "secondary-input",
 		buffer_capacity = toJ(config.pole_power_buffer),
 		input_flow_limit = toW(config.pole_flow_limit)
@@ -142,6 +158,7 @@ pole_holder_straight.pictures = { sheets = {{
 		width = 148, height = 108, shift = util.by_pixel(67, 9),
 		frames = 4, draw_as_shadow = 1
 	}}}
+pole_holder_straight.placeable_by = { item = "ret-dummy-pole-holder", count = 1}
 pole_holder_straight.energy_source = dummy_energy_source
 
 
@@ -157,12 +174,13 @@ pole_holder_diagonal.pictures = { sheets = {{
 		width = 148, height = 108, shift = util.by_pixel(67, 9),
 		frames = 4, draw_as_shadow = 1
 	}}}
+pole_holder_diagonal.placeable_by = { item = "ret-dummy-pole-holder", count = 1}
 pole_holder_diagonal.energy_source = dummy_energy_source
 
 
 -- Extend
 
-data:extend{pole_wire, pole_power, pole_holder_straight, pole_holder_diagonal}
+data:extend{pole_wire, pole_power_straight, pole_power_diagonal, pole_holder_straight, pole_holder_diagonal}
 
 --==============================================================================
 -- Particles

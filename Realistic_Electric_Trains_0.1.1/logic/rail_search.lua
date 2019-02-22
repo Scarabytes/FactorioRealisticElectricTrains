@@ -285,8 +285,9 @@ do
 	function search_next_poles(start_pole, max_distance, ignore)
 		-- setup utility references
 		local surface = start_pole.surface
-
-		local start_position = global.wire_for_pole[start_pole.unit_number].position
+		local wire = global.wire_for_pole[start_pole.unit_number]
+		local start_position = start_pole.position
+		if wire then start_position = wire.position end
 
 		-- find rails immediately adjacent to the pole
 		local begin = find_rails(start_pole)

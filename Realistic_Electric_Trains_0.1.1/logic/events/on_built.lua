@@ -11,6 +11,23 @@ do
 		["ret-chain-pole-placer"] = "ret-chain-pole-base"
 	}
 
+	function revive_or_create(surface, entity)
+		local ghosts = surface.find_entities_filtered{
+			ghost_name = entity.name, 
+			area = around_position(entity.position, 0.1)
+		}
+
+		if ghosts[1] then
+			local _, revived = ghosts[1].revive()
+			-- As the pole decorators are placeable off-grid they sometimes
+			-- move a tiny fraction to the side
+			revived.teleport(entity.position)
+			return revived
+		end
+		return surface.create_entity(entity)
+	end
+
+
 	-- initializes a newly placed pole. The entity can either be a placer or the
 	-- pole base entity.
 	function create_pole(entity)
@@ -20,20 +37,28 @@ do
 		local direction = entity.direction
 		local surface = entity.surface
 
-		-- Replace placer entity
-		local pole_name, pole_direction = 
-			fix_pole_build_name_and_dir(placer_to_base[entity_name], direction)
+		local pole
 
-		local pole = surface.create_entity {
-			name = pole_name,
-			force = force,
-			position = pos,
-			direction = pole_direction,
-			fast_replace = true
-		}
+		if placer_to_base[entity_name] then
+			-- Replace placer entity
+			local pole_name, pole_direction = 
+				fix_pole_build_name_and_dir(placer_to_base[entity_name], direction)
+
+			pole = revive_or_create(surface, {
+				name = pole_name,
+				force = force,
+				position = pos,
+				direction = pole_direction,
+				fast_replace = true
+			})
+		else
+			-- The given entity is the base
+			pole = entity
+			direction = fix_pole_dir(pole)
+		end
 
 		-- create wire, power and the pole rendering element
-		local wire_pos = wire_pos_for_pole(pole.position, fix_pole_dir(pole))
+		local wire_pos = wire_pos_for_pole(pole.position, direction)
 
 		local wire = surface.create_entity {
 			name = "ret-pole-wire",
@@ -41,28 +66,29 @@ do
 			position = wire_pos
 		}
 
-		local power = surface.create_entity {
-			name = "ret-pole-energy",
+		local power_name = "ret-pole-energy-straight"
+		if direction % 2 == 1 then power_name = "ret-pole-energy-diagonal" end
+
+		local power = revive_or_create(surface, {
+			name = power_name,
 			force = force,
-			position = pos,
-			direction = 2 * (direction % 2)
-		}
+			position = pos
+		})
 
 		local holder_name = "ret-pole-holder-straight"
 		if direction % 2 == 1 then holder_name = "ret-pole-holder-diagonal" end
 
-		local wire_holder = surface.create_entity {
+		local wire_holder = revive_or_create(surface, {
 			name = holder_name,
 			force = force,
 			position = pos,
 			direction = direction - (direction % 2)
-		}
+		})
 
 
 		-- this defaults to 40kJ for whatever reason...
 		power.electric_buffer_size = config.pole_power_buffer
 		power.energy = config.pole_power_buffer
-
 
 		-- store objects for fetching later
 		global.wire_for_pole[pole.unit_number] = wire
@@ -91,21 +117,55 @@ do
 		update_poles_near_rail(rail)
 	end
 
+	-- Deletes duplicate ghosts that have been placed over existing pole 
+	-- decorators due to small differences in position for off-grid entities
+	function delete_duplicate_ghosts(ghost)
+		local n = ghost.ghost_name
+		if n == "ret-pole-energy-straight" or n == "ret-pole-energy-diagonal" or
+		   n == "ret-pole-holder-straight" or n == "ret-pole-holder-diagonal" then
+				local other = ghost.surface.find_entities_filtered{
+					area = around_position(ghost.position, 0.1), name = n
+				}
+				if other[1] then
+					ghost.destroy()
+					return
+				end
+				local other = ghost.surface.find_entities_filtered{
+					area = around_position(ghost.position, 0.1), ghost_name = n
+				}
+				if other[1] then
+					ghost.destroy()
+					return
+				end
+		end
+	end
+
+	local is_placer_or_base = {
+		["ret-pole-placer"] = true,
+		["ret-signal-pole-placer"] = true,
+		["ret-chain-pole-placer"] = true,
+		["ret-pole-base-straight"] = true,
+		["ret-pole-base-diagonal"] = true,
+		["ret-signal-pole-base"] = true,
+		["ret-chain-pole-base"] = true
+	}
+
 	-- Handles the events on_built_entity & on_robot_built_entity
 	function on_entity_built(event)
 		local e = event.created_entity
 		local n = e.name
 
-			if n == "ret-pole-placer" or
-			   n == "ret-signal-pole-placer" or
-			   n == "ret-chain-pole-placer" then
-					create_pole(e)
+			if is_placer_or_base[n] then
+				create_pole(e)
 
 			elseif n == "ret-electric-locomotive" then
-					register_locomotive(e)
+				register_locomotive(e)
 
 			elseif n == "straight-rail" or n == "curved-rail" then
-					add_rail(e)
+				add_rail(e)
+
+			elseif n == "entity-ghost" then
+				delete_duplicate_ghosts(e)
 			end
 	end
 end

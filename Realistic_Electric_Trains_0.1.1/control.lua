@@ -35,8 +35,26 @@ script.on_init(
 		global.graphic_for_pole = {}-- Pole ID -> Graphic Entity
 		global.power_for_rail = {}  -- Rail ID -> Power Entity
 		global.electric_locos = {}  -- Loco ID -> Loco Entity
+
+		on_startup()
 	end
 )
+
+script.on_load(
+	function(e)
+		on_startup()
+	end
+)
+
+function on_startup()
+	-- Exclude the energy consumer and wire holder from creative mode's instant blueprints
+	if remote.interfaces["creative-mode"] then
+		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-energy-straight")
+		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-energy-diagonal")
+		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-holder-straight")
+		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-holder-diagonal")
+	end
+end
 
 -- Settings and configuration changes
 
@@ -80,45 +98,6 @@ script.on_event({
 
 script.on_event(defines.events.on_tick, 
 	require("logic.events.on_tick")
-)
-
---==============================================================================
-
--- Replacement scripts for the pole placer
-
-local valid_poles = {
-	["ret-pole-base-straight"] = true,
-	["ret-pole-base-diagonal"] = true,
-	["ret-signal-pole-base"] = true,
-	["ret-chain-pole-base"] = true
-}
-
-local pole_to_placer = {
-	["ret-pole-base"] = "ret-pole-placer",
-	["ret-signal-pole-base"] = "ret-signal-pole-placer",
-	["ret-chain-pole-base"] = "ret-chain-pole-placer"
-}
-
--- will be deleted...
-script.on_event(defines.events.on_player_setup_blueprint,
-	function(e)
-		local stack = game.players[e.player_index].blueprint_to_setup
-		if stack.name == "blueprint" then
-			local entities = stack.get_blueprint_entities()
-			local modified = false
-			for _, entity in pairs(entities) do
-				if valid_poles[entity.name] then
-					local entity_name, entity_direction = fix_pole_name_and_dir(entity)
-					modified = true
-					entity.direction = entity_direction
-					entity.name = pole_to_placer[entity_name]
-				end
-			end
-			if modified then
-				stack.set_blueprint_entities(entities)
-			end
-		end
-	end
 )
 
 --==============================================================================
