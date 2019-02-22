@@ -88,7 +88,25 @@ data:extend{electric_locomotive}
 
 --==============================================================================
 
--- Dummy fuel items
+-- Dummy items
+
+local dummy_pole_energy = {
+	type = "item",
+	name = "ret-dummy-pole-energy",
+	icon = graphics .. "items/pole-wire.png",
+	icon_size = 32,
+	flags = { "hidden" },
+	stack_size = 1
+}
+
+local dummy_pole_holder = {
+	type = "item",
+	name = "ret-dummy-pole-holder",
+	icon = graphics .. "items/pole-wire.png",
+	icon_size = 32,
+	flags = { "hidden" },
+	stack_size = 1
+}
 
 local dummy_fuel_1 = {
 	type = "item",
@@ -104,4 +122,4 @@ local dummy_fuel_1 = {
 	fuel_emission_modifier = 0.1
 }
 
-data:extend{dummy_fuel_1}
+data:extend{dummy_pole_energy, dummy_pole_holder, dummy_fuel_1}
