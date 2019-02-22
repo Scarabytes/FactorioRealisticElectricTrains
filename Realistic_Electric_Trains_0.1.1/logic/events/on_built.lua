@@ -109,7 +109,7 @@ do
 
 	-- Registers the given locomotive entity in the global table
 	function register_locomotive(locomotive)
-		global.electric_locos[locomotive.unit_number] = locomotive
+		table.insert(global.electric_locos, locomotive)
 	end
 
 	-- Updates nearby poles when a rail is placed down

@@ -12,7 +12,7 @@ Summary of global variables:
   * graphic_for_pole: Maps a pole's unit number to the wire holder entity
   * power_for_rail: Maps a rail's unit number to a power consumer powering it.
       The consumer might not be valid anymore, you need to check that!
-  * electric_locos: Maps a locomotive's unit number to the entity itself
+  * electric_locos: An array of electric locomotives
 
 Other global variables:
   * config: A table of static configuration values. Never changed at runtime.
@@ -34,7 +34,7 @@ script.on_init(
 		global.power_for_pole = {}  -- Pole ID -> Power Entity
 		global.graphic_for_pole = {}-- Pole ID -> Graphic Entity
 		global.power_for_rail = {}  -- Rail ID -> Power Entity
-		global.electric_locos = {}  -- Loco ID -> Loco Entity
+		global.electric_locos = {}  -- Array of Loco Entity
 
 		on_startup()
 	end

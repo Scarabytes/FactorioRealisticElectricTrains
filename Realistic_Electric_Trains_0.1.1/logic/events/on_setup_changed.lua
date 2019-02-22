@@ -82,6 +82,13 @@ function ingame_migration(event)
 			global.power_for_rail[k] = new_entities[rail_mapping[k]]
 		end
 
+		-- Changing the electric_locos map to an array
+		local new_array = {}
+		for _, loco in pairs(global.electric_locos) do
+			table.insert(new_array, loco)
+		end
+		global.electric_locos = new_array
+
 		game.print(string.format("Migrated Realistic Electric Trains from %s: Replaced %d entities", old_version, count))
 		old_version = "0.2.0"
 	end
