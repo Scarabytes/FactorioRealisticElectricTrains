@@ -142,7 +142,7 @@ script.on_event({
 		elseif n == "ret-electric-locomotive" then
 				register_locomotive(event)
 
-		elseif n == "straight-rail" or n == "curved-rail" then
+		elseif config.supported_rails[n] then
 				add_rail(event)
 		end
 	end
@@ -200,7 +200,7 @@ script.on_event({
 		elseif n == "ret-electric-locomotive" then
 				deregister_locomotive(event)
 
-		elseif n == "straight-rail" or n == "curved-rail" then
+		elseif config.supported_rails[n] then
 				remove_rail(event)
 		end
 	end
@@ -305,7 +305,7 @@ script.on_event(defines.events.on_player_selected_area,
 	function (e)
 		if e.item == "ret-pole-debugger" then
 			for _, entity in pairs(e.entities) do
-				if entity.name == "straight-rail" or entity.name == "curved-rail" then
+				if config.supported_rails[entity.name] then
 					local power_provider = global.power_for_rail[entity.unit_number]
 					local powered = power_provider and power_provider.valid
 					display_powered_state(entity, not powered)

@@ -10,4 +10,14 @@ config = {
 	pole_flow_limit_val = 1200000,
 	loco_max_energy_transfer = "200kJ",
 	loco_max_energy_transfer_val = 200000,
+	supported_rails = {
+		["straight-rail"] = true,
+		["curved-rail"] = true,
+		["bi-straight-rail-wood"] = true,
+		["bi-curved-rail-wood"] = true,
+		["bi-straight-rail-wood-bridge"] = true,
+		["bi-curved-rail-wood-bridge"] = true,
+		["bi-straight-rail-power"] = true,
+		["bi-curved-rail-power"] = true,
+	}
 }
