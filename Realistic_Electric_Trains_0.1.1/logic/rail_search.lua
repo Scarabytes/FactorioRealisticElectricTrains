@@ -298,7 +298,7 @@ function search_next_poles(start_pole, max_distance, ignore)
 		end
 	end
 	if ignore then
-		if config.supported_rails[ignore.name] then
+		if config.supported_rails[ignore.type] then
 			known_rails[ignore.unit_number] = true
 		else
 			known_poles[ignore.unit_number] = true

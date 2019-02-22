@@ -133,6 +133,7 @@ script.on_event({
 	},
 	function (event)
 		local n = event.created_entity.name
+		local t = event.created_entity.type
 
 		if n == "ret-pole-placer" or
 		   n == "ret-signal-pole-placer" or
@@ -142,7 +143,7 @@ script.on_event({
 		elseif n == "ret-electric-locomotive" then
 				register_locomotive(event)
 
-		elseif config.supported_rails[n] then
+		elseif config.supported_rails[t] then
 				add_rail(event)
 		end
 	end
@@ -190,6 +191,7 @@ script.on_event({
 	},
 	function (event)
 		local n = event.entity.name
+		local t = event.entity.type
 
 		if n == "ret-pole-base-straight" or
 		   n == "ret-pole-base-diagonal" or
@@ -200,7 +202,7 @@ script.on_event({
 		elseif n == "ret-electric-locomotive" then
 				deregister_locomotive(event)
 
-		elseif config.supported_rails[n] then
+		elseif config.supported_rails[t] then
 				remove_rail(event)
 		end
 	end
@@ -305,7 +307,7 @@ script.on_event(defines.events.on_player_selected_area,
 	function (e)
 		if e.item == "ret-pole-debugger" then
 			for _, entity in pairs(e.entities) do
-				if config.supported_rails[entity.name] then
+				if config.supported_rails[entity.type] then
 					local power_provider = global.power_for_rail[entity.unit_number]
 					local powered = power_provider and power_provider.valid
 					display_powered_state(entity, not powered)
