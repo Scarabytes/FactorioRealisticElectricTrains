@@ -14,7 +14,7 @@ function find_rails(pole)
 	local results = {}
 	for _, pos in pairs(positions) do
 		for _, entity in pairs(entities) do
-			if string.find(entity.name, pos.rail, 1, true) ~= nil and
+			if entity.type == pos.rail and
 			   entity.position.x == pos.x and
 			   entity.position.y == pos.y and
 			   entity.direction == pos.dir then
@@ -35,7 +35,7 @@ function find_adjacent_rails(rail, driving_direction)
 	local results = {}
 	for _, pos in pairs(positions) do
 		for _, entity in pairs(entities) do
-			if string.find(entity.name, pos.rail, 1, true) ~= nil and
+			if entity.type == pos.rail and
 			   entity.position.x == pos.x and
 			   entity.position.y == pos.y and
 			   entity.direction == pos.dir then
@@ -90,7 +90,7 @@ function check_curve_policy(start_position, find_result)
 	for k, rail in ipairs(path) do
 		if status == 0 then
 			-- first rail to be examined
-			if string.find(rail.name, "straight-rail", 1, true) then
+			if rail.type == "straight-rail" then
 				if rail.direction % 2 == 0 then
 					straight_count_before = straight_count_before + 1
 				else
@@ -111,7 +111,7 @@ function check_curve_policy(start_position, find_result)
 			end
 		elseif status == 1 then
 			-- waiting for first curve
-			if string.find(rail.name, "straight-rail", 1, true) then
+			if rail.type == "straight-rail" then
 				if rail.direction % 2 == 0 then
 					straight_count_before = straight_count_before + 1
 				else
@@ -129,7 +129,7 @@ function check_curve_policy(start_position, find_result)
 			end
 		elseif status == 2 then
 			-- after the first curve
-			if string.find(rail.name, "straight-rail", 1, true) then
+			if rail.type == "straight-rail" then
 				if rail.direction % 2 == 0 then
 					straight_count_after = straight_count_after + 1
 				else
@@ -208,7 +208,7 @@ function run_search_for_poles(start_position, check_list, known_poles, known_rai
 				for _, adjacent in pairs(rails) do
 					local rail = adjacent.rail
 					if not known_rails[rail.unit_number] then
-						local is_curve = string.find(rail.name, "curved-rail", 1, true) ~= nil
+						local is_curve = rail.type == "curved-rail"
 						local drive = adjacent.drive
 						local path = table.deepcopy(check.path)
 						table.insert(path, rail)
@@ -291,7 +291,7 @@ function search_next_poles(start_pole, max_distance, ignore)
 	local known_rails = {}
 	local known_poles = {[start_pole.unit_number] = true}
 	for _, rail in pairs(begin) do
-		local has_curve = string.find(rail.name,"curved-rail", 1, true) ~= nil
+		local has_curve = rail.type == "curved-rail"
 		known_rails[rail.unit_number] = true
 		for _, dir in pairs(driving_dirs_for_rail(rail.type, rail.direction)) do
 			table.insert(check_list, {rail = rail, drive = dir, path = {rail}, has_curve = has_curve})
@@ -316,7 +316,7 @@ function search_nearby_poles(start_rail, max_distance)
 	local known_rails = {[start_rail.unit_number] = true}
 	local known_poles = {}
 	for _, dir in pairs(driving_dirs_for_rail(start_rail.type, start_rail.direction)) do
-		local has_curve = string.find(start_rail.name,"curved-rail", 1, true) ~= nil
+		local has_curve = start_rail.type == "curved-rail"
 		table.insert(check_list, {rail = start_rail, drive = dir, path = {start_rail}, has_curve = has_curve})
 	end
 
