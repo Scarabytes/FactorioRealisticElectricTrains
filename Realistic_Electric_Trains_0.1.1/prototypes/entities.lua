@@ -201,4 +201,12 @@ electric_locomotive.reversing_power_modifier = 0.8
 electric_locomotive.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
 electric_locomotive.max_power = toW(config.locomotive_power)
 
-data:extend{electric_locomotive}
+local electric_locomotive_mk2 =
+	copy_prototype("locomotive", "locomotive", "ret-electric-locomotive-mk2")
+electric_locomotive_mk2.burner.fuel_inventory_size = 0
+electric_locomotive_mk2.burner.smoke = nil
+electric_locomotive_mk2.reversing_power_modifier = 0.8
+electric_locomotive_mk2.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
+electric_locomotive_mk2.max_power = toW(config.locomotive2_power)
+
+data:extend{electric_locomotive, electric_locomotive_mk2}
