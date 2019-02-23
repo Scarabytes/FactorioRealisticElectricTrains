@@ -84,7 +84,19 @@ local electric_locomotive = {
 	order = "b[locomotives]-a"
 }
 
-data:extend{electric_locomotive}
+local electric_locomotive_mk2 = {
+	type = "item",
+	name = "ret-electric-locomotive-mk2",
+	icon = graphics .. "items/electric-locomotive-2.png",
+	icon_size = 32,
+	flags = { "goes-to-quickbar" },
+	place_result = "ret-electric-locomotive-mk2",
+	stack_size = 5,
+	subgroup = "electric-trains",
+	order = "b[locomotives]-b"
+}
+
+data:extend{electric_locomotive, electric_locomotive_mk2}
 
 --==============================================================================
 
@@ -117,9 +129,27 @@ local dummy_fuel_1 = {
 	stack_size = 1,
 	fuel_category = "chemical",
 	fuel_value = toJ(config.locomotive_storage),
-	fuel_acceleration_modifier = 1.2,
-	fuel_top_speed_modifier = 1.1,
-	fuel_emission_modifier = 0.1
+	fuel_acceleration_multiplier = 1.5,
+	fuel_top_speed_multiplier = 1.1,
+	fuel_emission_multiplier = 0.1
+	-- For Locomotive Mk1
+	-- Adjusted acceleration: 150%
 }
 
-data:extend{dummy_pole_energy, dummy_pole_holder, dummy_fuel_1}
+local dummy_fuel_2 = {
+	type = "item",
+	name = "ret-dummy-fuel-2",
+	icon = graphics .. "items/dummy-fuel.png",
+	icon_size = 32,
+	flags = { "hidden" },
+	stack_size = 1,
+	fuel_category = "chemical",
+	fuel_value = toJ(config.locomotive2_storage),
+	fuel_acceleration_multiplier = 1.0,
+	fuel_top_speed_multiplier = 1.2,
+	fuel_emission_multiplier = 0.1
+	-- For Locomotive Mk2
+	-- Adjusted acceleration: 200%
+}
+
+data:extend{dummy_pole_energy, dummy_pole_holder, dummy_fuel_1, dummy_fuel_2}

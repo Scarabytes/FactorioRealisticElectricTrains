@@ -41,6 +41,11 @@ do
 		end
 	end
 
+	local is_electric_locomotive = {
+		["ret-electric-locomotive"] = true,
+		["ret-electric-locomotive-mk2"] = true
+	}
+
 	-- Handles the events on_entity_died, on_pre_player_mined_item & on_robot_pre_mined
 	function on_entity_removed(event)
 		local e = event.entity
@@ -52,7 +57,7 @@ do
 		   n == "ret-chain-pole-base" then
 				destroy_pole(e)
 
-		elseif n == "ret-electric-locomotive" then
+		elseif is_electric_locomotive[n] then
 				deregister_locomotive(e)
 
 		elseif n == "straight-rail" or n == "curved-rail" then
