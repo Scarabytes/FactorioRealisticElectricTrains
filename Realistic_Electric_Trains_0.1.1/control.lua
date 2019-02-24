@@ -6,14 +6,14 @@ require("logic.overhead_line")
 
 -- initialization
 script.on_init(
-	function(e)
-		-- init lookup tables
-		global.wire_for_pole = {}   -- Pole ID -> Wire Entity
-		global.power_for_pole = {}  -- Pole ID -> Power Entity
-		global.graphic_for_pole = {}-- Pole ID -> Graphic Entity
-		global.power_for_rail = {}  -- Rail ID -> Power Entity
-		global.electric_locos = {}  -- Loco ID -> Loco Entity
-	end
+		function(e)
+			-- init lookup tables
+			global.wire_for_pole = {}   -- Pole ID -> Wire Entity
+			global.power_for_pole = {}  -- Pole ID -> Power Entity
+			global.graphic_for_pole = {}-- Pole ID -> Graphic Entity
+			global.power_for_rail = {}  -- Rail ID -> Power Entity
+			global.electric_locos = {}  -- Loco ID -> Loco Entity
+		end
 )
 
 -- settings cache
@@ -59,7 +59,7 @@ function create_pole(event)
 	}
 
 	local pole_name, pole_direction = fix_pole_build_name_and_dir(
-	                                    actual_pole[placer_name], direction)
+			actual_pole[placer_name], direction)
 
 	local pole = surface.create_entity {
 		name = pole_name,
@@ -109,8 +109,8 @@ function create_pole(event)
 
 	-- connect to the next poles
 	install_pole(pole, {
-			show_failures = enable_failure_text, 
-			show_particles = enable_connect_particles
+		show_failures = enable_failure_text,
+		show_particles = enable_connect_particles
 	})
 
 	if enable_rewire_neighbours then
@@ -128,25 +128,25 @@ function add_rail(event)
 end
 
 script.on_event({
-		defines.events.on_built_entity,
-		defines.events.on_robot_built_entity
-	},
-	function (event)
-		local n = event.created_entity.name
-		local t = event.created_entity.type
+	defines.events.on_built_entity,
+	defines.events.on_robot_built_entity
+},
+		function (event)
+			local n = event.created_entity.name
+			local t = event.created_entity.type
 
-		if n == "ret-pole-placer" or
-		   n == "ret-signal-pole-placer" or
-		   n == "ret-chain-pole-placer" then
+			if n == "ret-pole-placer" or
+					n == "ret-signal-pole-placer" or
+					n == "ret-chain-pole-placer" then
 				create_pole(event)
 
-		elseif n == "ret-electric-locomotive" then
+			elseif n == "ret-electric-locomotive" then
 				register_locomotive(event)
 
-		elseif config.supported_rails[t] then
+			elseif config.supported_rails[t] then
 				add_rail(event)
+			end
 		end
-	end
 )
 
 --==============================================================================
@@ -185,27 +185,27 @@ function remove_rail(event)
 end
 
 script.on_event({
-		defines.events.on_entity_died,
-		defines.events.on_pre_player_mined_item,
-		defines.events.on_robot_pre_mined
-	},
-	function (event)
-		local n = event.entity.name
-		local t = event.entity.type
+	defines.events.on_entity_died,
+	defines.events.on_pre_player_mined_item,
+	defines.events.on_robot_pre_mined
+},
+		function (event)
+			local n = event.entity.name
+			local t = event.entity.type
 
-		if n == "ret-pole-base-straight" or
-		   n == "ret-pole-base-diagonal" or
-		   n == "ret-signal-pole-base" or
-		   n == "ret-chain-pole-base" then
+			if n == "ret-pole-base-straight" or
+					n == "ret-pole-base-diagonal" or
+					n == "ret-signal-pole-base" or
+					n == "ret-chain-pole-base" then
 				destroy_pole(event)
 
-		elseif n == "ret-electric-locomotive" then
+			elseif n == "ret-electric-locomotive" then
 				deregister_locomotive(event)
 
-		elseif config.supported_rails[t] then
+			elseif config.supported_rails[t] then
 				remove_rail(event)
+			end
 		end
-	end
 )
 
 --==============================================================================
@@ -220,28 +220,26 @@ do
 
 	function on_tick(event)
 
-		if event.tick % 10 == 0 then
 
-			if not dummy_fuel then
-				dummy_fuel = game.item_prototypes["ret-dummy-fuel-1"]
-				dummy_fuel_value = dummy_fuel.fuel_value
-			end
+		if not dummy_fuel then
+			dummy_fuel = game.item_prototypes["ret-dummy-fuel-1"]
+			dummy_fuel_value = dummy_fuel.fuel_value
+		end
 
-			-- power all trains
-			for _, loco in pairs(global.electric_locos) do
-				local burner = loco.burner
-				burner.currently_burning = dummy_fuel
-				local missing_energy = dummy_fuel_value - burner.remaining_burning_fuel
-				local power_provider = find_power_provider(loco)
-				if power_provider then
-					local transfer = math.min(missing_energy, 
-									 math.min(power_provider.energy, max_transfer))
-					if transfer > 0 then
-						burner.remaining_burning_fuel =
-								burner.remaining_burning_fuel + transfer
-						power_provider.energy =
-								power_provider.energy - transfer
-					end
+		-- power all trains
+		for _, loco in pairs(global.electric_locos) do
+			local burner = loco.burner
+			burner.currently_burning = dummy_fuel
+			local missing_energy = dummy_fuel_value - burner.remaining_burning_fuel
+			local power_provider = find_power_provider(loco)
+			if power_provider then
+				local transfer = math.min(missing_energy,
+						math.min(power_provider.energy, max_transfer))
+				if transfer > 0 then
+					burner.remaining_burning_fuel =
+					burner.remaining_burning_fuel + transfer
+					power_provider.energy =
+					power_provider.energy - transfer
 				end
 			end
 		end
@@ -249,7 +247,7 @@ do
 
 end
 
-script.on_event(defines.events.on_tick, on_tick)
+script.on_nth_tick(10, on_tick)
 
 
 --==============================================================================
@@ -270,33 +268,33 @@ local pole_to_placer = {
 }
 
 script.on_event(defines.events.on_player_pipette,
-	function(e)
-		local replace = pole_to_placer[e.item.name]
-		if replace then
-			game.players[e.player_index].pipette_entity(replace)
+		function(e)
+			local replace = pole_to_placer[e.item.name]
+			if replace then
+				game.players[e.player_index].pipette_entity(replace)
+			end
 		end
-	end
 )
 
 script.on_event(defines.events.on_player_setup_blueprint,
-	function(e)
-		local stack = game.players[e.player_index].blueprint_to_setup
-		if stack.name == "blueprint" then
-			local entities = stack.get_blueprint_entities()
-			local modified = false
-			for _, entity in pairs(entities) do
-				if valid_poles[entity.name] then
-					local entity_name, entity_direction = fix_pole_name_and_dir(entity)
-					modified = true
-					entity.direction = entity_direction
-					entity.name = pole_to_placer[entity_name]
+		function(e)
+			local stack = game.players[e.player_index].blueprint_to_setup
+			if stack.name == "blueprint" then
+				local entities = stack.get_blueprint_entities()
+				local modified = false
+				for _, entity in pairs(entities) do
+					if valid_poles[entity.name] then
+						local entity_name, entity_direction = fix_pole_name_and_dir(entity)
+						modified = true
+						entity.direction = entity_direction
+						entity.name = pole_to_placer[entity_name]
+					end
+				end
+				if modified then
+					stack.set_blueprint_entities(entities)
 				end
 			end
-			if modified then
-				stack.set_blueprint_entities(entities)
-			end
 		end
-	end
 )
 
 --==============================================================================
@@ -304,30 +302,30 @@ script.on_event(defines.events.on_player_setup_blueprint,
 -- Selection script for the debugger
 
 script.on_event(defines.events.on_player_selected_area,
-	function (e)
-		if e.item == "ret-pole-debugger" then
-			for _, entity in pairs(e.entities) do
-				if config.supported_rails[entity.type] then
-					local power_provider = global.power_for_rail[entity.unit_number]
-					local powered = power_provider and power_provider.valid
-					display_powered_state(entity, not powered)
+		function (e)
+			if e.item == "ret-pole-debugger" then
+				for _, entity in pairs(e.entities) do
+					if config.supported_rails[entity.type] then
+						local power_provider = global.power_for_rail[entity.unit_number]
+						local powered = power_provider and power_provider.valid
+						display_powered_state(entity, not powered)
+					end
 				end
-			end 
+			end
 		end
-	end
 )
 
 --==============================================================================
 
 -- Commands
 
-commands.add_command("print_electric_train_count", 
-	"Prints how many electric trains are currently registered in the Realistic Electric Trains mod.",
-	function()
-		local count = 0
-		for _, _ in pairs(global.electric_locos) do
-			count = count + 1
+commands.add_command("print_electric_train_count",
+		"Prints how many electric trains are currently registered in the Realistic Electric Trains mod.",
+		function()
+			local count = 0
+			for _, _ in pairs(global.electric_locos) do
+				count = count + 1
+			end
+			game.print(string.format("Total Trains: %d", count))
 		end
-		game.print(string.format("Total Trains: %d", count))
-	end
 )
