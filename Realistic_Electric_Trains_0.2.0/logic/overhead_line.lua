@@ -203,7 +203,7 @@ function unpower_nearby_rails(rail)
 	for _, success in pairs(nearby_poles.success) do
 		for _, spot in pairs(success.path) do
 			global.power_for_rail[spot.unit_number] = nil
-			if enable_connect_particles then display_powered_state(spot, true) end
+			if enable_connect_particles then display_powered_state(spot, false) end
 		end
 		install_pole(success.pole, {}, rail)
 	end
