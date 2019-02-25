@@ -61,6 +61,20 @@ data:extend {
 		{"electronic-circuit", 3}
 	},
 	enabled = false
-}
+},
+
+{
+	type = "recipe",
+	name = "ret-electric-locomotive-mk2",
+	result = "ret-electric-locomotive-mk2",
+	ingredients = {
+		{"ret-electric-locomotive", 1}, 
+		{"electric-engine-unit", 20},
+		{"advanced-circuit", 20},
+		{"processing-unit", 5}
+	},
+	energy_required = 16,
+	enabled = false
+},
 
 }

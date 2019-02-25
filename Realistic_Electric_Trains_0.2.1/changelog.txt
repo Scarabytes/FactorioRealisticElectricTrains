@@ -1,0 +1,9 @@
+0.2.1:
+  - Enabled the research and recipe for the new locomotive.
+
+0.2.0:
+  - Poles are now blueprintable and work even with circuit wires
+  - Update frequency is now customizable; default is 60 Ticks
+  - Electric Locomotive Mk2 added
+  - Accelerations of the locomotives adjusted
+  - Adding support for modded rails

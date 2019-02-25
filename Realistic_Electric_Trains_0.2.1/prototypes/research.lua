@@ -27,6 +27,29 @@ data:extend {
 		time = 30
 	},
 	order = "c-g-c"
+},
+
+{
+	type = "technology",
+	name = "ret-electric-locomotives-mk2",
+	icon_size = 128,
+	icon = graphics .. "technology/advanced-electric-trains.png",
+	effects = {
+		{ type = "unlock-recipe", recipe = "ret-electric-locomotive-mk2" }
+	},
+	prerequisites = { "ret-electric-locomotives", "advanced-electronics-2" },
+	unit =
+	{
+		count = 500,
+		ingredients =
+		{
+			{"science-pack-1", 1},
+			{"science-pack-2", 1},
+			{"science-pack-3", 1}
+		},
+		time = 30
+	},
+	order = "c-g-d"
 }
 
 }
