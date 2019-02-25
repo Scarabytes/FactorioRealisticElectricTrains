@@ -166,7 +166,7 @@ do
 			elseif is_electric_locomotive[n] then
 				register_locomotive(e)
 
-			elseif n == "straight-rail" or n == "curved-rail" then
+			elseif e.type == "straight-rail" or e.type == "curved-rail" then
 				add_rail(e)
 
 			elseif n == "entity-ghost" then

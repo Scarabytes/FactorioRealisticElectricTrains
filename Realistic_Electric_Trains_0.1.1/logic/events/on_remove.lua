@@ -60,7 +60,7 @@ do
 		elseif is_electric_locomotive[n] then
 				deregister_locomotive(e)
 
-		elseif n == "straight-rail" or n == "curved-rail" then
+		elseif e.type == "straight-rail" or e.type == "curved-rail" then
 				remove_rail(e)
 		end
 	end
