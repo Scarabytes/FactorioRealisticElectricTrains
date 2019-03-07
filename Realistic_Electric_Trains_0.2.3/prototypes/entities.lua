@@ -27,7 +27,7 @@ simple_pole_straight.sprites = { sheet = {
 -- combinator specific stuff
 simple_pole_straight.item_slot_count = 0
 simple_pole_straight.activity_led_sprites = { sheet = {
-		filename = graphics .. "empty.png", width = 0.25, height = 1
+		filename = graphics .. "empty.png", width = 1, height = 1
 	}}
 simple_pole_straight.activity_led_light_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}}
 
@@ -43,7 +43,7 @@ simple_pole_diagonal.sprites = { sheet = {
 -- combinator specific stuff
 simple_pole_diagonal.item_slot_count = 0
 simple_pole_diagonal.activity_led_sprites = { sheet = {
-		filename = graphics .. "empty.png", width = 0.25, height = 1
+		filename = graphics .. "empty.png", width = 1, height = 1
 	}}
 simple_pole_diagonal.activity_led_light_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}}
 
