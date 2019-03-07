@@ -10,15 +10,15 @@ do
 
 		-- remove wire, power and graphic
 		local wire = global.wire_for_pole[pole.unit_number]
-		if wire then wire.destroy() end
+		if wire and wire.valid then wire.destroy() end
 		global.wire_for_pole[pole.unit_number] = nil
 
 		local power = global.power_for_pole[pole.unit_number]
-		if power then power.destroy() end
+		if power and power.valid then power.destroy() end
 		global.power_for_pole[pole.unit_number] = nil
 
 		local graphic = global.graphic_for_pole[pole.unit_number]
-		if graphic then graphic.destroy() end
+		if graphic and graphic.valid then graphic.destroy() end
 		global.graphic_for_pole[pole.unit_number] = nil
 	end
 

@@ -105,6 +105,10 @@ local pole_wire = {
 		filename = graphics .. "empty.png",
 		width = 1, height = 1, direction_count = 1
 	},
+	resistances = { -- immune to any damage
+		{type="physical",percent=100},{type="explosion",percent=100},
+		{type="acid",percent=100},{type="fire",percent=100}
+	},
 	selection_priority = 100,
 	maximum_wire_distance = config.pole_max_wire_distance + 0.5,
 	supply_area_distance = config.pole_supply_area,

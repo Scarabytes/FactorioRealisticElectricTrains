@@ -4,6 +4,49 @@ require("util")
 require("config")
 require("rail_search")
 
+function respawn_pole_children(pole)
+	local wire = global.wire_for_pole[pole.unit_number]
+	if not wire or not wire.valid then
+		local wire_pos = wire_pos_for_pole(pole.position, fix_pole_dir(pole))
+		global.wire_for_pole[pole.unit_number] = pole.surface.create_entity {
+			name = "ret-pole-wire",
+			force = pole.force,
+			position = wire_pos
+		}
+	end
+
+	local power = global.power_for_pole[pole.unit_number]
+	if not power or not power.valid then
+		local power_name = "ret-pole-energy-straight"
+		if fix_pole_dir(pole) % 2 == 1 then power_name = "ret-pole-energy-diagonal" end
+
+		local new_power = pole.surface.create_entity{
+			name = power_name,
+			force = pole.force,
+			position = pole.position
+		}
+
+		new_power.electric_buffer_size = config.pole_power_buffer
+
+		global.power_for_pole[pole.unit_number] = new_power
+	end
+
+	local holder = global.graphic_for_pole[pole.unit_number]
+	if not holder or not holder.valid then
+		local direction = fix_pole_dir(pole)
+		local holder_name = "ret-pole-holder-straight"
+		if direction % 2 == 1 then holder_name = "ret-pole-holder-diagonal" end
+
+		global.graphic_for_pole[pole.unit_number] = pole.surface.create_entity{
+			name = holder_name,
+			force = pole.force,
+			position = pole.pos,
+			direction = direction - (direction % 2)
+		}
+	end
+end
+
+
 -- Displays particles on the rail according to the powered parameter
 function display_powered_state(rail, powered)
 	local surface = rail.surface
@@ -61,6 +104,12 @@ end
 function rewire_pole(pole, search_results)
 	-- disconnect all wires to neighbour overhead lines
 	local wire = global.wire_for_pole[pole.unit_number]
+
+	if not wire or not wire.valid then
+		respawn_pole_children(pole)
+		wire = global.wire_for_pole[pole.unit_number]
+	end
+
 	for _, neighbour in pairs(wire.neighbours.copper) do
 		if neighbour.name == "ret-pole-wire" then
 			wire.disconnect_neighbour(neighbour)
@@ -69,7 +118,13 @@ function rewire_pole(pole, search_results)
 
 	-- reconnect proper wires
 	for _, success in pairs(search_results.success) do
-		wire.connect_neighbour(global.wire_for_pole[success.pole.unit_number])
+		local neighbour = global.wire_for_pole[success.pole.unit_number]
+		if not neighbour or not neighbour.valid then
+			respawn_pole_children(success.pole)
+			neighbour = global.wire_for_pole[success.pole.unit_number]
+		end
+		wire.connect_neighbour(neighbour)
+
 		if enable_circuit_wire then
 			pole.connect_neighbour(
 				{wire = defines.wire_type.red, target_entity = success.pole})
@@ -136,7 +191,12 @@ function zigzag_pole_wire(start_pole, search_results)
 			has_straight = true
 			has_vertical = success.path[1].direction == defines.direction.north
 			local pole = success.pole
-			local mode = find_wire_mode(pole, global.wire_for_pole[pole.unit_number])
+			local wire = global.wire_for_pole[pole.unit_number]
+			if not wire or not wire.valid then
+				respawn_pole_children(pole)
+				wire = global.wire_for_pole[pole.unit_number]
+			end
+			local mode = find_wire_mode(pole, wire)
 			if mode ~= 2 then
 				if other_nonstandard == 0 then
 					other_nonstandard = mode
@@ -151,6 +211,10 @@ function zigzag_pole_wire(start_pole, search_results)
 
 	if has_straight and (has_vertical or not enable_zigzag_vertical_only) then
 		local wire = global.wire_for_pole[start_pole.unit_number]
+		if not wire or not wire.valid then
+			respawn_pole_children(pole)
+			wire = global.wire_for_pole[pole.unit_number]
+		end
 		local position = wire_pos_for_pole(start_pole.position, 
 							fix_pole_dir(start_pole), invert[other_nonstandard])
 		wire.teleport(position)
