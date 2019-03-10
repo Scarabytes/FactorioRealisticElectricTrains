@@ -12,7 +12,7 @@ do
 			local loco_1_prototype = game.entity_prototypes["ret-electric-locomotive"]
 			local loco_1_efficiency_modifier = 1.05
 			if loco_1_prototype.burner_prototype.effectivity < 1 then
-				loco_1_efficiency_modifier = loco_1_efficiency_modifier * (2 - loco_1_prototype.burner_prototype.effectivity)
+				loco_1_efficiency_modifier = loco_1_efficiency_modifier / loco_1_prototype.burner_prototype.effectivity
 			end
 			
 			local loco_2_prototype = game.entity_prototypes["ret-electric-locomotive-mk2"]
