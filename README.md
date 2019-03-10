@@ -4,11 +4,17 @@ Realistic Electric Trains
 Realistic Electric Trains - or RET for short - adds locomotives to Factorio that
 are powered with electricity from overhead lines, rather than fuel.
 
-Link to the Factorio Mod Portal will be added soon
+[Mod Portal][portal]  
+[Forum thread][forum]
 
-Currently, a basic electric locomotive and overhead line poles with and without 
-integrated signals are implemented. I'm planning on adding higher-tier 
+Currently, two basic electric locomotives and overhead line poles with and 
+without integrated signals are implemented. I'm planning on adding higher-tier 
 locomotives and better 3D models in the near future.
+
+
+[portal]: https://mods.factorio.com/mod/Realistic_Electric_Trains
+[forum]: https://forums.factorio.com/viewtopic.php?f=190&t=64946
+
 
 Tutorial
 --------
@@ -36,4 +42,4 @@ test your code and try to document it. If you want to submit graphics or better
 animation setup in order to have the images rendered pixel-perfectly.
 
 Please note though, that I obviously cannot accept any random change. If you
-want to know whether I like an idea of yours, just ask in the mod portal.
+want to know whether I like an idea of yours, just ask in the forum.
