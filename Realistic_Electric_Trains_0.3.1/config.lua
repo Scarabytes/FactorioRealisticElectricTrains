@@ -13,12 +13,15 @@ end
 
 config = {
 	pole_max_wire_distance = 16,
+
 	pole_supply_area = 4,
 
-	-- Supports a continuous supply of 4.8MW
-	pole_power_buffer = store(4800000),
 	-- Refills the buffer until the next update
 	pole_flow_limit = 4800000,
+	-- Pole enable buffer (1kJ)
+	pole_enable_buffer = 1000,
+	-- Pole maximum deficit (9.6MJ)
+	pole_max_deficit = 9600000,
 
 	-- Locomotive Mk 1
 	locomotive_power = locomotive_power,

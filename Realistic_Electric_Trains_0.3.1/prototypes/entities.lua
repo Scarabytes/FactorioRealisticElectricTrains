@@ -130,7 +130,7 @@ pole_power_straight.picture = {
 pole_power_straight.placeable_by = { item = "ret-dummy-pole-energy", count = 1}
 pole_power_straight.energy_source = {
 		type = "electric", usage_priority = "secondary-input",
-		buffer_capacity = toJ(config.pole_power_buffer),
+		buffer_capacity = "2MJ", -- this value doesn't matter
 		input_flow_limit = toW(config.pole_flow_limit)
 	}
 
@@ -145,7 +145,7 @@ pole_power_diagonal.picture = {
 pole_power_diagonal.placeable_by = { item = "ret-dummy-pole-energy", count = 1}
 pole_power_diagonal.energy_source = {
 		type = "electric", usage_priority = "secondary-input",
-		buffer_capacity = toJ(config.pole_power_buffer),
+		buffer_capacity = "2MJ", -- this value doesn't matter
 		input_flow_limit = toW(config.pole_flow_limit)
 	}
 
