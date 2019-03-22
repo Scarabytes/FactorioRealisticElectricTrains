@@ -17,14 +17,6 @@ function on_configuration_changed(event)
 	if event.mod_changes.Realistic_Electric_Trains then
 		ingame_migration(event)
 	end
-
-	-- update the electric buffer size for all energy consumers when the 
-	-- settings were changed
-	for _, power in pairs(global.power_for_pole) do
-		local missing_energy = power.electric_buffer_size - power.energy
-		power.electric_buffer_size = config.pole_power_buffer
-		power.energy = config.pole_power_buffer - missing_energy
-	end
 end
 
 -- Performs migration with the global table

@@ -86,9 +86,9 @@ do
 		})
 
 
-		-- this defaults to 40kJ for whatever reason...
-		power.electric_buffer_size = config.pole_power_buffer
-		power.energy = config.pole_power_buffer
+		-- Setup the connectivity check for the pole
+		power.electric_buffer_size = config.pole_enable_buffer
+		power.energy = 0
 
 		-- store objects for fetching later
 		global.wire_for_pole[pole.unit_number] = wire

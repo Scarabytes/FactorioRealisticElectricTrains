@@ -26,7 +26,7 @@ function respawn_pole_children(pole)
 			position = pole.position
 		}
 
-		new_power.electric_buffer_size = config.pole_power_buffer
+		new_power.electric_buffer_size = config.pole_enable_buffer
 
 		global.power_for_pole[pole.unit_number] = new_power
 	end
