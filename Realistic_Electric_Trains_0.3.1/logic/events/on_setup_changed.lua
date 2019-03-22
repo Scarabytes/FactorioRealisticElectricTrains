@@ -6,6 +6,7 @@ function on_settings_changed(event)
 
 	enable_connect_particles = settings.global["ret-enable-connect-particles"].value
 	enable_failure_text = settings.global["ret-enable-failure-text"].value
+	enable_modular_info = settings.global["ret-enable-modular-info"].value
 	enable_zigzag_wire = settings.global["ret-enable-zigzag-wire"].value
 	enable_zigzag_vertical_only = settings.global["ret-enable-zigzag-vertical-only"].value
 	enable_circuit_wire = settings.global["ret-enable-circuit-wire"].value
@@ -16,6 +17,10 @@ end
 function on_configuration_changed(event)
 	if event.mod_changes.Realistic_Electric_Trains then
 		ingame_migration(event)
+	end
+
+	if not global.fuel_for_loco then
+		global.fuel_for_loco = {}
 	end
 end
 

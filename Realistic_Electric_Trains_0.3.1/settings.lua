@@ -16,6 +16,14 @@ local enable_failure_text = {
 	order = "a-b"
 }
 
+local enable_modular_info_text = {
+	type = "bool-setting",
+	name = "ret-enable-modular-info",
+	setting_type = "runtime-global",
+	default_value = true,
+	order = "a-c"
+}
+
 local enable_zigzag_wire = {
 	type = "bool-setting",
 	name = "ret-enable-zigzag-wire",
@@ -68,6 +76,6 @@ local ticks_per_update = {
 	order = "a"
 }
 
-data:extend{enable_connect_particles, enable_failure_text, 
+data:extend{enable_connect_particles, enable_failure_text, enable_modular_info_text,
 			enable_circuit_wire, enable_zigzag_wire, enable_zigzag_vertical_only,
 			enable_rewire_neighbours, max_pole_search_distance, ticks_per_update}

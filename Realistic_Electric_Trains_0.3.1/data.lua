@@ -7,5 +7,6 @@ graphics = path .. "graphics/"
 require("config")
 require("prototypes.items")
 require("prototypes.entities")
+require("prototypes.equipment")
 require("prototypes.recipes")
 require("prototypes.research")

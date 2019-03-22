@@ -211,6 +211,15 @@ electric_locomotive_mk2.burner.fuel_inventory_size = 0
 electric_locomotive_mk2.burner.smoke = nil
 electric_locomotive_mk2.reversing_power_modifier = 0.8
 electric_locomotive_mk2.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
-electric_locomotive_mk2.max_power = toW(config.locomotive2_power)
+electric_locomotive_mk2.max_power = toW(config.advanced_locomotive_power)
 
-data:extend{electric_locomotive, electric_locomotive_mk2}
+local modular_electric_locomotive =
+	copy_prototype("locomotive", "locomotive", "ret-modular-locomotive")
+modular_electric_locomotive.burner.fuel_inventory_size = 0
+modular_electric_locomotive.burner.smoke = nil
+modular_electric_locomotive.reversing_power_modifier = 0.8
+modular_electric_locomotive.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
+modular_electric_locomotive.max_power = toW(config.modular_locomotive_base_power)
+modular_electric_locomotive.equipment_grid = "modular-locomotive-grid"
+
+data:extend{electric_locomotive, electric_locomotive_mk2, modular_electric_locomotive}

@@ -3,15 +3,7 @@
 
 do
 
-	local loco_fuel_data
-
-
 	function on_tick(event)
-
-		if not loco_fuel_data then
-			setup_fuel_data()
-		end
-
 		-- Power all locomotives
 		local offset = event.tick % ticks_per_update
 		local locos = global.electric_locos
@@ -24,45 +16,75 @@ do
 
 
 
-	function setup_fuel_data()
-		local loco_1_prototype = game.entity_prototypes["ret-electric-locomotive"]
-		local loco_1_efficiency_modifier = 1.05
-		if loco_1_prototype.burner_prototype.effectivity < 1 then
-			loco_1_efficiency_modifier = loco_1_efficiency_modifier / loco_1_prototype.burner_prototype.effectivity
-		end
-		
-		local loco_2_prototype = game.entity_prototypes["ret-electric-locomotive-mk2"]
-		local loco_2_efficiency_modifier = 1.05
-		if loco_2_prototype.burner_prototype.effectivity < 1 then
-			loco_2_efficiency_modifier = loco_2_efficiency_modifier / loco_2_prototype.burner_prototype.effectivity
-		end
-		
-		loco_fuel_data = {
-			["ret-electric-locomotive"] = {
-				item = game.item_prototypes["ret-dummy-fuel-1"],
-				fuel = game.item_prototypes["ret-dummy-fuel-1"].fuel_value,
-				-- max_energy_usage is in J/t instead of J/s as in data
-				transfer = loco_1_prototype.max_energy_usage * ticks_per_update * loco_1_efficiency_modifier,
-			},
-			["ret-electric-locomotive-mk2"] = {
-				item = game.item_prototypes["ret-dummy-fuel-2"],
-				fuel = game.item_prototypes["ret-dummy-fuel-2"].fuel_value,
-				-- max_energy_usage is in J/t instead of J/s as in data
-				transfer = loco_2_prototype.max_energy_usage * ticks_per_update * loco_2_efficiency_modifier,
+	function get_fuel_data(locomotive)
+		if locomotive.name == "ret-electric-locomotive" then
+			local proto = game.item_prototypes["ret-dummy-fuel-1"]
+			return {
+				item = proto,
+				fuel = proto.fuel_value,
+				power = 1,
+				transfer = calc_transfer_rate("ret-electric-locomotive")
 			}
-		}
+
+		elseif locomotive.name == "ret-electric-locomotive-mk2" then
+			local proto = game.item_prototypes["ret-dummy-fuel-2"]
+			return {
+				item = proto,
+				fuel = proto.fuel_value,
+				power = 1,
+				transfer = calc_transfer_rate("ret-electric-locomotive-mk2")
+			}
+
+		elseif locomotive.name == "ret-modular-locomotive" then
+			local c = get_module_counts(locomotive)
+			local suffix = get_module_string(c.s, c.p, c.e, c.b)
+			local stats = get_module_stats(c.s, c.p, c.e, c.b)
+			local proto = game.item_prototypes["ret-dummy-fuel-modular-" .. suffix]
+			if not proto then
+				proto = game.item_prototypes["ret-dummy-fuel-modular-"]
+			end
+			return {
+				item = proto,
+				fuel = proto.fuel_value,
+				power = stats.power,
+				transfer = calc_transfer_rate("ret-modular-locomotive") * stats.power
+			}
+
+		end
+	end
+
+
+	function calc_transfer_rate(prototype_name) 
+		local prototype = game.entity_prototypes[prototype_name]
+		local efficiency_modifier = 1.05
+		if prototype.burner_prototype.effectivity < 1 then
+			efficiency_modifier = efficiency_modifier / prototype.burner_prototype.effectivity
+		end
+		-- max_energy_usage is in J/t instead of J/s as in data
+		return prototype.max_energy_usage * efficiency_modifier * ticks_per_update
 	end
 
 
 	function update_locomotive(loco)
 		local burner = loco.burner
-		local fuel_data = loco_fuel_data[loco.name]
 
-		if burner.remaining_burning_fuel <= 0 then
+		-- Get fuel data for this specific locomotive
+		local fuel_data = global.fuel_for_loco[loco.unit_number]
+		local updated = false
+		if not fuel_data then
+			updated = true
+			fuel_data = get_fuel_data(loco)
+			global.fuel_for_loco[loco.unit_number] = fuel_data
+			--game.print(string.format("Updated %d with %s", loco.unit_number, fuel_data.item.name))
+		end
+
+		-- Refresh the burning item when the type was changed or the fuel ran out
+		if burner.remaining_burning_fuel <= 0 or updated then
 			burner.currently_burning = fuel_data.item
 		end
 
-		local missing_energy = fuel_data.fuel - burner.remaining_burning_fuel
+		-- Calculate the missing energy and multiply in the power factor of this locomotive
+		local missing_energy = (fuel_data.fuel - burner.remaining_burning_fuel) * fuel_data.power
 		if missing_energy > 0 then
 			local power_provider = find_power_provider(loco)
 
@@ -71,7 +93,7 @@ do
 				local charge = take_power(power_provider, transfer)
 				if charge > 0 then
 					burner.remaining_burning_fuel =
-							burner.remaining_burning_fuel + charge
+							burner.remaining_burning_fuel + charge / fuel_data.power
 				end
 			end
 		end

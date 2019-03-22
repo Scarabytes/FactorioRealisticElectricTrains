@@ -30,7 +30,7 @@ do
 
 	-- initializes a newly placed pole. The entity can either be a placer or the
 	-- pole base entity.
-	function create_pole(entity)
+	function create_pole(entity, player)
 		local entity_name = entity.name
 		local pos = { x = entity.position.x, y = entity.position.y }
 		local force = entity.force
@@ -99,8 +99,9 @@ do
 		-- connect to the next poles
 		install_pole(pole, {
 				show_failures = enable_failure_text, 
-				show_particles = enable_connect_particles
-		})
+				show_particles = enable_connect_particles,
+				install_circuit_wire = true
+		}, nil, player)
 
 		if enable_rewire_neighbours then
 			rewire_neighbours(pole)
@@ -152,7 +153,8 @@ do
 
 	local is_electric_locomotive = {
 		["ret-electric-locomotive"] = true,
-		["ret-electric-locomotive-mk2"] = true
+		["ret-electric-locomotive-mk2"] = true,
+		["ret-modular-locomotive"] = true
 	}
 
 	-- Handles the events on_built_entity & on_robot_built_entity
@@ -161,7 +163,7 @@ do
 		local n = e.name
 
 			if is_placer_or_base[n] then
-				create_pole(e)
+				create_pole(e, event.player_index)
 
 			elseif is_electric_locomotive[n] then
 				register_locomotive(e)
