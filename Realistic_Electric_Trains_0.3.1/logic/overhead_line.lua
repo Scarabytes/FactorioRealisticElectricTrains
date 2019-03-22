@@ -168,7 +168,7 @@ function display_failures(pole, search_results, player)
 				time_to_live = 240
 			}
 		else
-			local distance = util.distance(pos, pole.position)
+			local distance = util.distance(failure.pole.position, pole.position)
 			local too_far = math.ceil(distance - config.pole_max_wire_distance)
 			rendering.draw_text {
 				text = {"message.ret-connect-failure"},
