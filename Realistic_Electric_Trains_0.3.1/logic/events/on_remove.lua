@@ -31,6 +31,7 @@ do
 				break
 			end
 		end
+		global.fuel_for_loco[locomotive.unit_number] = nil
 	end
 
 	-- Unpowers a track segment when a rail is removed
@@ -43,7 +44,8 @@ do
 
 	local is_electric_locomotive = {
 		["ret-electric-locomotive"] = true,
-		["ret-electric-locomotive-mk2"] = true
+		["ret-electric-locomotive-mk2"] = true,
+		["ret-modular-locomotive"] = true
 	}
 
 	-- Handles the events on_entity_died, on_pre_player_mined_item & on_robot_pre_mined

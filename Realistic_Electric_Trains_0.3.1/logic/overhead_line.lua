@@ -101,7 +101,7 @@ function remove_powered_rails(search_results, show_particles)
 end
 
 -- Deletes all copper wires to other poles and reconnects only neighboring poles
-function rewire_pole(pole, search_results)
+function rewire_pole(pole, search_results, circuit_wire)
 	-- disconnect all wires to neighbour overhead lines
 	local wire = global.wire_for_pole[pole.unit_number]
 
@@ -125,7 +125,7 @@ function rewire_pole(pole, search_results)
 		end
 		wire.connect_neighbour(neighbour)
 
-		if enable_circuit_wire then
+		if enable_circuit_wire and circuit_wire then
 			pole.connect_neighbour(
 				{wire = defines.wire_type.red, target_entity = success.pole})
 			pole.connect_neighbour(
@@ -144,37 +144,51 @@ function rewire_neighbours(pole)
 end
 
 -- Displays a message for all failed search_results
-function display_failures(pole, search_results)
+function display_failures(pole, search_results, player)
 	for _, failure in pairs(search_results.failure) do 
 		if failure.curve then
-			local pos = failure.pole.position
-			failure.pole.surface.create_entity {
-				name = "flying-text",
-				position = pos,
+			rendering.draw_text {
 				text = {"message.ret-connect-failure"},
-				color = {r = 1, g = 0.25}
+				surface = failure.pole.surface,
+				target = failure.pole,
+				target_offset = {0, 0},
+				scale_with_zoom = true,
+				color = {r=1, g=0.25},
+				players = {player},
+				time_to_live = 240
 			}
-			failure.pole.surface.create_entity {
-				name = "flying-text",
-				position = {x = pos.x + 0.5, y = pos.y + 0.5},
+			rendering.draw_text {
 				text = {"message.ret-connect-failure-curve"},
-				color = {r = 1, g = 0.5}
+				surface = failure.pole.surface,
+				target = failure.pole,
+				target_offset = {0.5, 0.5},
+				scale_with_zoom = true,
+				color = {r=1, g=0.5},
+				players = {player},
+				time_to_live = 240
 			}
 		else
-			local pos = failure.pole.position
 			local distance = util.distance(pos, pole.position)
 			local too_far = math.ceil(distance - config.pole_max_wire_distance)
-			failure.pole.surface.create_entity {
-				name = "flying-text",
-				position = pos,
+			rendering.draw_text {
 				text = {"message.ret-connect-failure"},
-				color = {r = 1, g = 0.25}
+				surface = failure.pole.surface,
+				target = failure.pole,
+				target_offset = {0, 0},
+				scale_with_zoom = true,
+				color = {r=1, g=0.25},
+				players = {player},
+				time_to_live = 240
 			}
-			failure.pole.surface.create_entity {
-				name = "flying-text",
-				position = {x = pos.x + 0.5, y = pos.y + 0.5},
+			rendering.draw_text {
 				text = {"message.ret-connect-failure-distance", too_far},
-				color = {r = 1, g = 0.5}
+				surface = failure.pole.surface,
+				target = failure.pole,
+				target_offset = {0.5, 0.5},
+				scale_with_zoom = true,
+				color = {r=1, g=0.5},
+				players = {player},
+				time_to_live = 240
 			}
 		end
 	end
@@ -221,14 +235,14 @@ function zigzag_pole_wire(start_pole, search_results)
 	end
 end
 
--- Powers rails up to the next poles. Options may contain show_failures and/or
--- show_particles
-function install_pole(pole, options, ignore) 
+-- Powers rails up to the next poles. Options may contain show_failures,
+-- show_particles and/or install_circuit_wire
+function install_pole(pole, options, ignore, player) 
 	local next_poles = search_next_poles(pole, config.pole_max_wire_distance, ignore)
-	if options.show_failures then display_failures(pole, next_poles) end
+	if options.show_failures and player then display_failures(pole, next_poles, player) end
 	mark_powered_rails(pole, next_poles, options.show_particles)
 	if enable_zigzag_wire then zigzag_pole_wire(pole, next_poles) end
-	rewire_pole(pole, next_poles)
+	rewire_pole(pole, next_poles, options.install_circuit_wire)
 end
 
 -- Unpowers rails up to the next poles.
@@ -254,7 +268,7 @@ function find_power_provider(locomotive)
 end
 
 -- Installs poles next to the given rail entity
-function update_poles_near_rail(rail)
+function update_poles_near_rail(rail, player)
 	local nearby_poles = search_nearby_poles(rail, config.pole_max_wire_distance / 2 + 2)
 	for _, success in pairs(nearby_poles.success) do
 		install_pole(success.pole, {show_particles = enable_connect_particles})

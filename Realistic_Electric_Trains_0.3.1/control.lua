@@ -13,6 +13,9 @@ Summary of global variables:
   * power_for_rail: Maps a rail's unit number to a power consumer powering it.
       The consumer might not be valid anymore, you need to check that!
   * electric_locos: An array of electric locomotives
+  * fuel_for_loco: Maps a modular loco's unit number to a table with values 
+      "fuel" (the fuel prototype) and "transfer" (the max transfer rate). May be
+      nil and should be regenerated then.
 
 Other global variables:
   * config: A table of static configuration values. Never changed at runtime.
@@ -35,6 +38,7 @@ script.on_init(
 		global.graphic_for_pole = {}-- Pole ID -> Graphic Entity
 		global.power_for_rail = {}  -- Rail ID -> Power Entity
 		global.electric_locos = {}  -- Array of Loco Entity
+		global.fuel_for_loco = {}   -- Loco ID -> Table {fuel, transfer}
 
 		on_startup()
 	end
@@ -90,6 +94,14 @@ script.on_event({
 		defines.events.on_robot_pre_mined
 	},
 	require("logic.events.on_remove")
+)
+
+--==============================================================================
+
+-- GUI Events
+
+script.on_event(defines.events.on_gui_closed,
+	require("logic.events.on_gui_closed")
 )
 
 --==============================================================================
