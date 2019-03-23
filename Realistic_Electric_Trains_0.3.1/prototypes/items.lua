@@ -12,6 +12,13 @@ data:extend{{
 	order = "e-a"
 }}
 
+data:extend{{
+	type = "item-subgroup",
+	name = "electric-train-modules",
+	group = "logistics",
+	order = "e-b"
+}}
+
 -- Placer
 
 local simple_pole_placer = {
@@ -115,8 +122,8 @@ local train_speed_module = {
 	icon_size = 32,
 	placed_as_equipment_result = "ret-train-speed-module",
 	stack_size = 20,
-	subgroup = "electric-trains",
-	order = "c[modules]-a"
+	subgroup = "electric-train-modules",
+	order = "a"
 }
 
 local train_productivity_module = {
@@ -126,8 +133,8 @@ local train_productivity_module = {
 	icon_size = 32,
 	placed_as_equipment_result = "ret-train-productivity-module",
 	stack_size = 20,
-	subgroup = "electric-trains",
-	order = "c[modules]-c"
+	subgroup = "electric-train-modules",
+	order = "c"
 }
 
 local train_efficiency_module = {
@@ -137,8 +144,8 @@ local train_efficiency_module = {
 	icon_size = 32,
 	placed_as_equipment_result = "ret-train-efficiency-module",
 	stack_size = 20,
-	subgroup = "electric-trains",
-	order = "c[modules]-b"
+	subgroup = "electric-train-modules",
+	order = "b"
 }
 
 local train_battery_module = {
@@ -148,8 +155,8 @@ local train_battery_module = {
 	icon_size = 32,
 	placed_as_equipment_result = "ret-train-battery-module",
 	stack_size = 20,
-	subgroup = "electric-trains",
-	order = "c[modules]-d"
+	subgroup = "electric-train-modules",
+	order = "d"
 }
 
 data:extend{train_speed_module, train_productivity_module, train_efficiency_module,
