@@ -1,3 +1,9 @@
+0.4.0:
+  - Adding the modular locomotive
+  - Removing the positive energy buffer in the powerpoles
+  - Adding a remote interface for other mods to register their own electric trains
+  - Changing the flying text to rendered text using the new rendering API
+
 0.3.1:
   - Adding support for modified burner effectivity
   - Reduced electric buffer in powerpoles a lot
