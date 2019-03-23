@@ -177,6 +177,11 @@ local dummy_pole_holder = {
 	stack_size = 1
 }
 
+data:extend{{
+	type = "fuel-category",
+	name = "dummy"
+}}
+
 local dummy_fuel_1 = {
 	type = "item",
 	name = "ret-dummy-fuel-1",
@@ -184,7 +189,7 @@ local dummy_fuel_1 = {
 	icon_size = 32,
 	flags = { "hidden" },
 	stack_size = 1,
-	fuel_category = "chemical",
+	fuel_category = "dummy",
 	fuel_value = toJ(config.locomotive_storage),
 	fuel_acceleration_multiplier = 1.5,
 	fuel_top_speed_multiplier = 1.1,
@@ -200,7 +205,7 @@ local dummy_fuel_2 = {
 	icon_size = 32,
 	flags = { "hidden" },
 	stack_size = 1,
-	fuel_category = "chemical",
+	fuel_category = "dummy",
 	fuel_value = toJ(config.advanced_locomotive_storage),
 	fuel_acceleration_multiplier = 1.0,
 	fuel_top_speed_multiplier = 1.2,
@@ -230,7 +235,7 @@ for s = 0, 4 do
 						icon_size = 32,
 						flags = { "hidden" },
 						stack_size = 1,
-						fuel_category = "chemical",
+						fuel_category = "dummy",
 						-- The power factor can't be added to the locomotive directly,
 						-- therefore we multiply it in during the recharge process.
 						-- The internal fuel value is displayed_power / power_factor

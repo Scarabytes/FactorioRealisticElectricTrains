@@ -21,7 +21,6 @@ do
 			local proto = game.item_prototypes["ret-dummy-fuel-1"]
 			return {
 				item = proto,
-				fuel = proto.fuel_value,
 				power = 1,
 				transfer = calc_transfer_rate("ret-electric-locomotive")
 			}
@@ -30,7 +29,6 @@ do
 			local proto = game.item_prototypes["ret-dummy-fuel-2"]
 			return {
 				item = proto,
-				fuel = proto.fuel_value,
 				power = 1,
 				transfer = calc_transfer_rate("ret-electric-locomotive-mk2")
 			}
@@ -45,7 +43,6 @@ do
 			end
 			return {
 				item = proto,
-				fuel = proto.fuel_value,
 				power = stats.power,
 				transfer = calc_transfer_rate("ret-modular-locomotive") * stats.power
 			}
@@ -78,13 +75,15 @@ do
 			--game.print(string.format("Updated %d with %s", loco.unit_number, fuel_data.item.name))
 		end
 
+		if not fuel_data then return end
+
 		-- Refresh the burning item when the type was changed or the fuel ran out
 		if burner.remaining_burning_fuel <= 0 or updated then
 			burner.currently_burning = fuel_data.item
 		end
 
 		-- Calculate the missing energy and multiply in the power factor of this locomotive
-		local missing_energy = (fuel_data.fuel - burner.remaining_burning_fuel) * fuel_data.power
+		local missing_energy = (fuel_data.item.fuel_value - burner.remaining_burning_fuel) * fuel_data.power
 		if missing_energy > 0 then
 			local power_provider = find_power_provider(loco)
 
@@ -98,6 +97,7 @@ do
 			end
 		end
 	end
+
 
 	local enable_buffer = config.pole_enable_buffer
 

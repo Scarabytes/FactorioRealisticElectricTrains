@@ -2,6 +2,7 @@
 
 require("config")
 require("logic.overhead_line")
+require("logic.remotes")
 
 --[[
 Summary of global variables:
