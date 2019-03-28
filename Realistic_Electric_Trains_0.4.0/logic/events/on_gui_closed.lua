@@ -47,6 +47,7 @@ do
 		local item_name = get_module_string(c.s, c.p, c.e, c.b)
 		local stats = get_module_stats(c.s, c.p, c.e, c.b)
 		local prototype = game.item_prototypes["ret-dummy-fuel-modular-" .. item_name]
+		local power = stats.power * locomotive.prototype.max_energy_usage * 60 / locomotive.prototype.burner_prototype.effectivity
 		local white = {r=1, g=1, b=1}
 
 		draw_text({"message.ret-locomotive-battery-size", util.format_number(prototype.fuel_value * stats.power, true)},
@@ -55,29 +56,11 @@ do
 			locomotive, white, {-2.5, -2.5}, player)
 		draw_text({"message.ret-locomotive-max-speed", string.format("%.0f", prototype.fuel_top_speed_multiplier * 259.2)},
 			locomotive, white, {-2.5, -3}, player)
-		local power = stats.power * locomotive.prototype.max_energy_usage * 60 / locomotive.prototype.burner_prototype.effectivity
-
-		local y = -4
-		if power <= config.power_soft_cap then
-			draw_text({"message.ret-locomotive-energy-usage", util.format_number(power, true)},
-				locomotive, white, {-2.5, -3.5}, player)
-		else
-			local color = {r=1, g=0.5}
-			if power <= config.power_hard_cap then
-				draw_text({"message.ret-locomotive-critical-energy"},
-					locomotive, color, {-2, -3.5}, player)
-			else
-				color.g = 0.25
-				draw_text({"message.ret-locomotive-too-much-energy"},
-					locomotive, color, {-2, -3.5}, player)
-			end
-			y = -4.5
-			draw_text({"message.ret-locomotive-energy-usage", util.format_number(power, true)},
-				locomotive, color, {-2.5, -4}, player)
-		end
+		draw_text({"message.ret-locomotive-energy-usage", util.format_number(power, true)},
+			locomotive, white, {-2.5, -3.5}, player)
 
 		draw_text({"message.ret-module-updated"},
-				locomotive, {g=0.75,b=0.75}, {-3, y}, player)
+			locomotive, {g=0.75,b=0.75}, {-3, -4}, player)
 	end
 end
 

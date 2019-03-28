@@ -88,8 +88,7 @@ do
 			local power_provider = find_power_provider(loco)
 
 			if power_provider then
-				local transfer = math.min(missing_energy, fuel_data.transfer)
-				local charge = take_power(power_provider, transfer)
+				local charge = take_power(power_provider, missing_energy, fuel_data.transfer)
 				if charge > 0 then
 					burner.remaining_burning_fuel =
 							burner.remaining_burning_fuel + charge / fuel_data.power
@@ -100,14 +99,32 @@ do
 
 
 	local enable_buffer = config.pole_enable_buffer
+	local update_factor = ticks_per_update / 60
 
-	function take_power(power_provider, power)
-		local deficit = power_provider.electric_buffer_size - power_provider.energy
+	function take_power(power_provider, missing_energy, max_transfer)
+		if power_provider.energy >= enable_buffer then
+			-- pole is powered, we can draw some power from it
+			local requested = math.min(missing_energy, max_transfer * update_factor)
 
-		if power_provider.energy >= enable_buffer and deficit + power < config.pole_max_deficit then
-			-- pole is powered and not too drained, we can draw some power from it
-			power_provider.electric_buffer_size = deficit + power + enable_buffer
-			power_provider.energy = enable_buffer
+			-- take stored power immediately
+			local power = math.min(requested, power_provider.energy - enable_buffer)
+			power_provider.energy = power_provider.energy - power
+
+			-- if still more power is needed, increase the buffer to at most double
+			-- the maximum transfer (double is needed for two consecutive locos)
+			-- otherwise, reduce buffer size as much as possible
+			requested = requested - power
+			if requested > 0 then
+				local max_buffer = max_transfer * 2 * update_factor + enable_buffer
+				local buffer_increase = math.min(requested, max_buffer - power_provider.electric_buffer_size)
+				power = power + buffer_increase
+				power_provider.electric_buffer_size = power_provider.electric_buffer_size + buffer_increase
+			else
+				local deficit = power_provider.electric_buffer_size - power_provider.energy
+				power_provider.electric_buffer_size = deficit + enable_buffer
+				power_provider.energy = enable_buffer
+			end
+
 			return power
 		else
 			-- no power can be drawn
