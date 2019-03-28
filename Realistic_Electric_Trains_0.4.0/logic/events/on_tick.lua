@@ -88,8 +88,7 @@ do
 			local power_provider = find_power_provider(loco)
 
 			if power_provider then
-				local transfer = math.min(missing_energy, fuel_data.transfer)
-				local charge = take_power(power_provider, transfer)
+				local charge = take_power(power_provider, missing_energy, fuel_data.transfer)
 				if charge > 0 then
 					burner.remaining_burning_fuel =
 							burner.remaining_burning_fuel + charge / fuel_data.power
@@ -100,14 +99,20 @@ do
 
 
 	local enable_buffer = config.pole_enable_buffer
+	local update_factor = ticks_per_update / 60
 
-	function take_power(power_provider, power)
-		local deficit = power_provider.electric_buffer_size - power_provider.energy
+	function take_power(power_provider, missing_energy, max_transfer)
+		if power_provider.energy >= enable_buffer then
+			-- pole is powered, we can draw some power from it
+			local deficit = power_provider.electric_buffer_size - power_provider.energy
+			local max_deficit = max_transfer * 2 * update_factor + enable_buffer
+			local max_deficit_increase = math.max(max_deficit - deficit, 0)
 
-		if power_provider.energy >= enable_buffer and deficit + power < config.pole_max_deficit then
-			-- pole is powered and not too drained, we can draw some power from it
+			local power = math.min(math.min(missing_energy, max_transfer * update_factor), max_deficit_increase)
+
 			power_provider.electric_buffer_size = deficit + power + enable_buffer
 			power_provider.energy = enable_buffer
+
 			return power
 		else
 			-- no power can be drawn

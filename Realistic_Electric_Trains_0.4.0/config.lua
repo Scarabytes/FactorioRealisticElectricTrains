@@ -16,18 +16,6 @@ config = {
 	pole_flow_limit = 4800000,
 	-- Pole enable buffer (1kJ)
 	pole_enable_buffer = 1000,
-	-- Pole maximum deficit (9.6MJ)
-	pole_max_deficit = 9600000,
-
-
-	-- When a locomotive exceeds the soft cap, it might lose power temporarily 
-	-- when multiple similar locomotives are powered by a single pole, e.g. when
-	-- they pull the same train. (4.8MW)
-	power_soft_cap = 4800000,
-	-- When a locomotive exceeds the hard cap, it cannot be powered by the grid
-	-- at all. (9.6MW)
-	power_hard_cap = 9600000,
-
 
 
 	-- Locomotive Mk 1 (600kW, like vanilla)
