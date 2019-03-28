@@ -201,6 +201,8 @@ local electric_locomotive =
 	copy_prototype("locomotive", "locomotive", "ret-electric-locomotive")
 electric_locomotive.burner.fuel_inventory_size = 0
 electric_locomotive.burner.smoke = nil
+electric_locomotive.weight = 3000
+electric_locomotive.braking_force = 16
 electric_locomotive.reversing_power_modifier = 0.8
 electric_locomotive.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
 electric_locomotive.max_power = toW(config.locomotive_power)
@@ -209,17 +211,23 @@ local electric_locomotive_mk2 =
 	copy_prototype("locomotive", "locomotive", "ret-electric-locomotive-mk2")
 electric_locomotive_mk2.burner.fuel_inventory_size = 0
 electric_locomotive_mk2.burner.smoke = nil
+electric_locomotive_mk2.weight = 3000
+electric_locomotive_mk2.braking_force = 24
 electric_locomotive_mk2.reversing_power_modifier = 0.8
 electric_locomotive_mk2.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
 electric_locomotive_mk2.max_power = toW(config.advanced_locomotive_power)
+electric_locomotive_mk2.max_speed = 1.4
 
 local modular_electric_locomotive =
 	copy_prototype("locomotive", "locomotive", "ret-modular-locomotive")
 modular_electric_locomotive.burner.fuel_inventory_size = 0
 modular_electric_locomotive.burner.smoke = nil
+modular_electric_locomotive.weight = 4000
+modular_electric_locomotive.braking_force = 32
 modular_electric_locomotive.reversing_power_modifier = 0.8
 modular_electric_locomotive.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
 modular_electric_locomotive.max_power = toW(config.modular_locomotive_base_power)
+modular_electric_locomotive.max_speed = 1.4
 modular_electric_locomotive.equipment_grid = "modular-locomotive-grid"
 
 data:extend{electric_locomotive, electric_locomotive_mk2, modular_electric_locomotive}

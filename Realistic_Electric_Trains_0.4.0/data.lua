@@ -10,3 +10,5 @@ require("prototypes.entities")
 require("prototypes.equipment")
 require("prototypes.recipes")
 require("prototypes.research")
+
+require("compatibility.train_overhaul")

@@ -54,13 +54,24 @@ do
 			locomotive, white, {-2.5, -2}, player)
 		draw_text({"message.ret-locomotive-acceleration", stats.acceleration * 100},
 			locomotive, white, {-2.5, -2.5}, player)
-		draw_text({"message.ret-locomotive-max-speed", string.format("%.0f", prototype.fuel_top_speed_multiplier * 259.2)},
+		draw_text({"message.ret-locomotive-max-speed", string.format("%.0f", prototype.fuel_top_speed_multiplier * 302.4)},
 			locomotive, white, {-2.5, -3}, player)
+
+		local y = -3.5
+
+		local power_color = white
+		if power > config.pole_flow_limit * 2 then 
+			power_color = {r=1,g=1}
+			draw_text({"message.ret-locomotive-critical-energy"},
+				locomotive, power_color, {-2, y}, player)
+			y = -4
+		end
+			
 		draw_text({"message.ret-locomotive-energy-usage", util.format_number(power, true)},
-			locomotive, white, {-2.5, -3.5}, player)
+			locomotive, power_color, {-2.5, y}, player)
 
 		draw_text({"message.ret-module-updated"},
-			locomotive, {g=0.75,b=0.75}, {-3, -4}, player)
+			locomotive, {g=0.75,b=0.75}, {-3, y-0.5}, player)
 	end
 end
 

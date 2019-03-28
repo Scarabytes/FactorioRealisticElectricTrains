@@ -1,11 +1,14 @@
 {
-    "name": "Realistic_Electric_Trains",
-    "version": "0.4.0",
-    "title": "Realistic Electric Trains",
-    "author": "J_Aetherwing",
-    "contact": "",
-    "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64946",
-    "factorio_version": "0.17",
-    "dependencies": ["base >= 0.17", "(?) creative-mode-fix >= 0.0.30"],
-    "description": "This mod adds electric trains which require power delivered by overhead lines."
+	"name": "Realistic_Electric_Trains",
+	"version": "0.4.0",
+	"title": "Realistic Electric Trains",
+	"author": "J_Aetherwing",
+	"contact": "",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64946",
+	"factorio_version": "0.17",
+	"dependencies": [
+		"base >= 0.17",
+		"(?) creative-mode-fix >= 0.0.30"
+	],
+	"description": "This mod adds electric trains which require power delivered by overhead lines."
 }
