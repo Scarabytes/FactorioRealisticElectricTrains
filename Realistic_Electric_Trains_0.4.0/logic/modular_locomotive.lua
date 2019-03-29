@@ -1,7 +1,7 @@
 --modular_locomotive.lua
 --Defines utility methods for the modular locomotive
 
-local speed_module_speed = 0.1
+local speed_module_speed = 0.15
 local speed_module_power_factor = 1.5
 local prod_module_acceleration = 0.2
 local prod_module_power_factor = 1.7

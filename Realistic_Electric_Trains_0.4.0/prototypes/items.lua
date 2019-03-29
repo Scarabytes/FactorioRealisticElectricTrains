@@ -199,7 +199,7 @@ local dummy_fuel_1 = {
 	fuel_category = "dummy",
 	fuel_value = toJ(config.locomotive_storage),
 	fuel_acceleration_multiplier = 1.5,
-	fuel_top_speed_multiplier = 1.1,
+	fuel_top_speed_multiplier = 1.2,
 	fuel_emission_multiplier = 0.1
 	-- For Locomotive Mk1
 	-- Adjusted acceleration: 150%
@@ -247,8 +247,8 @@ for s = 0, 4 do
 						-- therefore we multiply it in during the recharge process.
 						-- The internal fuel value is displayed_power / power_factor
 						fuel_value = toJ(config.modular_locomotive_storage + stats.storage / stats.power),
-						fuel_acceleration_multiplier = (5/6) * stats.acceleration,
-						fuel_top_speed_multiplier = 1.2 * stats.speed,
+						fuel_acceleration_multiplier = stats.acceleration,
+						fuel_top_speed_multiplier = stats.speed,
 						fuel_emission_multiplier = 0.1
 					}
 
