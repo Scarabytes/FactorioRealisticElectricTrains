@@ -59,6 +59,13 @@ function on_startup()
 		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-holder-straight")
 		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-holder-diagonal")
 	end
+
+	-- Exclude electric locomotives from the Automatic Train Fuel Stop
+	if remote.interfaces["FuelTrainStop"] then
+		remote.call("FuelTrainStop", "exclude_from_fuel_schedule", "ret-electric-locomotive")
+		remote.call("FuelTrainStop", "exclude_from_fuel_schedule", "ret-electric-locomotive-mk2")
+		remote.call("FuelTrainStop", "exclude_from_fuel_schedule", "ret-modular-locomotive")
+	end
 end
 
 -- Settings and configuration changes

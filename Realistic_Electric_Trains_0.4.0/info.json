@@ -8,6 +8,7 @@
 	"factorio_version": "0.17",
 	"dependencies": [
 		"base >= 0.17",
+		"? FuelTrainStop >= 0.17.2",
 		"(?) creative-mode-fix >= 0.0.30"
 	],
 	"description": "This mod adds electric trains which require power delivered by overhead lines."
