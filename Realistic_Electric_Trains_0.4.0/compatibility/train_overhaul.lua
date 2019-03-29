@@ -14,6 +14,7 @@ if mods["TrainOverhaul"] then
 
 	loco_1.max_power = loco_1_power .. "kW"
 	loco_1.max_health = 1500
+	loco_1.max_speed = 1.2
 	loco_1.weight = 4000 * settings.startup["train-overhaul-weight-multiplicator"].value
 	loco_1.reversing_power_modifier = 1
 	loco_1.braking_force = 32
@@ -23,7 +24,7 @@ if mods["TrainOverhaul"] then
 
 	loco_2.max_power = loco_2_power .. "kW"
 	loco_2.max_health = 1500
-	loco_2.max_speed = 1.4 -- canilla default 1.2
+	loco_2.max_speed = 1.4
 	loco_2.weight = 4500 * settings.startup["train-overhaul-weight-multiplicator"].value
 	loco_2.reversing_power_modifier = 1
 	loco_2.braking_force = 40
@@ -33,7 +34,7 @@ if mods["TrainOverhaul"] then
 
 	loco_modular.max_power = loco_modular_power .. "kW"
 	loco_modular.max_health = 1500
-	loco_modular.max_speed = 1.4 -- vanilla default 1.2
+	loco_modular.max_speed = 1.4
 	loco_modular.weight = 5000 * settings.startup["train-overhaul-weight-multiplicator"].value
 	loco_modular.reversing_power_modifier = 1
 	loco_modular.braking_force = 48
@@ -47,11 +48,9 @@ if mods["TrainOverhaul"] then
 
 	dummy_fuel_1.fuel_value = store(loco_1_power / loco_effectivity * 2) .. "kJ"
 	dummy_fuel_1.fuel_acceleration_multiplier = 1.2
-	dummy_fuel_1.fuel_top_speed_multiplier = 1
 
 	dummy_fuel_2.fuel_value = store(loco_2_power / loco_effectivity * 2) .. "kJ"
 	dummy_fuel_2.fuel_acceleration_multiplier = 1.2
-	dummy_fuel_2.fuel_top_speed_multiplier = 1
 
 	for s = 0, 4 do
 	for p = 0, 4 - s do
@@ -63,9 +62,6 @@ if mods["TrainOverhaul"] then
 
 					local item = data.raw["item"]["ret-dummy-fuel-modular-"..name]
 					item.fuel_value = toJ(store(loco_modular_power * 2000) + stats.storage / stats.power)
-					item.fuel_acceleration_multiplier = item.fuel_acceleration_multiplier * 1.2
-
-					data:extend{item}
 				end
 			end
 		end
