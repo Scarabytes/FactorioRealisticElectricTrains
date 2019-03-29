@@ -77,7 +77,7 @@ data:extend{simple_pole_placer, signal_pole_placer, chain_pole_placer, pole_debu
 -- Electric locomotive
 
 local electric_locomotive = {
-	type = "item",
+	type = "item-with-entity-data",
 	name = "ret-electric-locomotive",
 	icon = graphics .. "items/electric-locomotive.png",
 	icon_size = 32,
@@ -88,7 +88,7 @@ local electric_locomotive = {
 }
 
 local electric_locomotive_mk2 = {
-	type = "item",
+	type = "item-with-entity-data",
 	name = "ret-electric-locomotive-mk2",
 	icon = graphics .. "items/electric-locomotive-2.png",
 	icon_size = 32,
@@ -99,7 +99,7 @@ local electric_locomotive_mk2 = {
 }
 
 local modular_locomotive = {
-	type = "item",
+	type = "item-with-entity-data",
 	name = "ret-modular-locomotive",
 	icon = graphics .. "items/modular-locomotive.png",
 	icon_size = 32,
