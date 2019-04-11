@@ -106,9 +106,12 @@ script.on_event({
 
 --==============================================================================
 
--- GUI Events
+-- Module Update events (GUI-Closed and Fast-Transferred)
 
-script.on_event(defines.events.on_gui_closed,
+script.on_event({
+		defines.events.on_gui_closed,
+		defines.events.on_player_fast_transferred
+	},
 	require("logic.events.on_gui_closed")
 )
 
