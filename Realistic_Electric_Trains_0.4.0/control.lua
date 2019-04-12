@@ -68,6 +68,12 @@ function on_startup()
 	end
 end
 
+electric_loco_registry = {
+	["ret-electric-locomotive"] = "ret-dummy-fuel-1",
+	["ret-electric-locomotive-mk2"] = "ret-dummy-fuel-2",
+	["ret-modular-locomotive"] = "ret-dummy-fuel-modular"
+}
+
 -- Settings and configuration changes
 
 require("logic.events.on_setup_changed")

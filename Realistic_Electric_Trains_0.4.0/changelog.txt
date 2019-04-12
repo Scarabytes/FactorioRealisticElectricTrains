@@ -6,6 +6,7 @@ Date: 12.04.2019
     - Adding item description to the locomotives
   Changes:
     - Removing the energy consumption cap
+    - Improved the remote interface (unfortunately, not backwards compatible)
   Fixes:
     - Fixing modules being deleted when a locomotive is picked up
 

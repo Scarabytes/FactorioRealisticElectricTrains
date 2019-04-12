@@ -8,8 +8,21 @@ do
 		local offset = event.tick % ticks_per_update
 		local locos = global.electric_locos
 
+		local locos_to_remove = {}
+
 		for i = #locos - offset, 1, -ticks_per_update do
-			update_locomotive(locos[i])
+			if locos[i].valid and electric_loco_registry[locos[i].name] then
+				update_locomotive(locos[i])
+			else
+				-- delete locomotives that cannot be updated anymore
+				table.insert(locos_to_remove, i)
+			end
+		end
+
+		-- locos_to_remove is ordered descending, thus we can simply remove the
+		-- indices one after another without risking id issues.
+		for _, remove in ipairs(locos_to_remove) do
+			table.remove(locos, remove)
 		end
 
 	end
@@ -17,36 +30,33 @@ do
 
 
 	function get_fuel_data(locomotive)
-		if locomotive.name == "ret-electric-locomotive" then
-			local proto = game.item_prototypes["ret-dummy-fuel-1"]
-			return {
-				item = proto,
-				power = 1,
-				transfer = calc_transfer_rate("ret-electric-locomotive")
-			}
+		local fuel_item = electric_loco_registry[locomotive.name]
 
-		elseif locomotive.name == "ret-electric-locomotive-mk2" then
-			local proto = game.item_prototypes["ret-dummy-fuel-2"]
-			return {
-				item = proto,
-				power = 1,
-				transfer = calc_transfer_rate("ret-electric-locomotive-mk2")
-			}
+		if fuel_item then
+			if fuel_item == "ret-dummy-fuel-modular" then
+				-- Find the correct modular fuel if requested
+				local c = get_module_counts(locomotive)
+				local suffix = get_module_string(c.s, c.p, c.e, c.b)
+				local stats = get_module_stats(c.s, c.p, c.e, c.b)
+				local proto = game.item_prototypes["ret-dummy-fuel-modular-" .. suffix]
+				if not proto then
+					proto = game.item_prototypes["ret-dummy-fuel-modular-"]
+				end
+				return {
+					item = proto,
+					power = stats.power,
+					transfer = calc_transfer_rate(locomotive.name) * stats.power
+				}
+			else
 
-		elseif locomotive.name == "ret-modular-locomotive" then
-			local c = get_module_counts(locomotive)
-			local suffix = get_module_string(c.s, c.p, c.e, c.b)
-			local stats = get_module_stats(c.s, c.p, c.e, c.b)
-			local proto = game.item_prototypes["ret-dummy-fuel-modular-" .. suffix]
-			if not proto then
-				proto = game.item_prototypes["ret-dummy-fuel-modular-"]
+				-- Use the given item
+				local proto = game.item_prototypes["ret-dummy-fuel-1"]
+				return {
+					item = proto,
+					power = 1,
+					transfer = calc_transfer_rate(locomotive.name)
+				}
 			end
-			return {
-				item = proto,
-				power = stats.power,
-				transfer = calc_transfer_rate("ret-modular-locomotive") * stats.power
-			}
-
 		end
 	end
 
