@@ -87,7 +87,9 @@ script.on_configuration_changed(
 
 script.on_event({
 		defines.events.on_built_entity,
-		defines.events.on_robot_built_entity
+		defines.events.on_robot_built_entity,
+		defines.events.script_raised_built,
+		defines.events.script_raised_revive
 	},
 	require("logic.events.on_built")
 )
@@ -99,7 +101,8 @@ script.on_event({
 script.on_event({
 		defines.events.on_entity_died,
 		defines.events.on_pre_player_mined_item,
-		defines.events.on_robot_pre_mined
+		defines.events.on_robot_pre_mined,
+		defines.events.script_raised_destroy
 	},
 	require("logic.events.on_remove")
 )

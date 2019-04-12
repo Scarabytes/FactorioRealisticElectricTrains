@@ -9,7 +9,8 @@
 	"dependencies": [
 		"base >= 0.17",
 		"? FuelTrainStop >= 0.17.2",
-		"(?) creative-mode-fix >= 0.0.30"
+		"(?) creative-mode-fix >= 0.0.30",
+		"(?) creative-mod >= 1.0.4"
 	],
 	"description": "This mod adds electric trains which require power delivered by overhead lines."
 }

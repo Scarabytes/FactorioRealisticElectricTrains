@@ -159,7 +159,7 @@ do
 
 	-- Handles the events on_built_entity & on_robot_built_entity
 	function on_entity_built(event)
-		local e = event.created_entity
+		local e = event.created_entity or event.entity
 		local n = e.name
 
 			if is_placer_or_base[n] then
