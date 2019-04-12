@@ -10,10 +10,11 @@
 -- ret-dummy-fuel-2 (from the tier 2 electric locomotive) and "ret-dummy-fuel-modular".
 -- The latter enables modules being detected in the locomotive.
 function register_locomotive_type(loco_name, fuel_item)
-	if not game.entity_prototypes[loco_name] or ((not game.item_prototypes[fuel_item]) and fuel_item ~= "ret-dummy-fuel-modular" and fuel_item ~= nil) then
+	if (not game.entity_prototypes[loco_name]) or 
+	   (fuel_item ~= nil and fuel_item ~= "ret-dummy-fuel-modular" and game.item_prototypes[fuel_item] ~= nil) then
 		error("register_locomotive_type called with invalid arguments")
 	end
-	electric_loco_registry[loco_name] = fuel_item
+	global.electric_loco_registry[loco_name] = fuel_item
 
 	if remote.interfaces["FuelTrainStop"] then
 		remote.call("FuelTrainStop", "exclude_from_fuel_schedule", loco_name)
@@ -22,7 +23,7 @@ end
 
 -- Returns the fuel item this locomotive type was registered with.
 function get_locomotive_fuel(loco_name)
-	return electric_loco_registry[loco_name]
+	return global.electric_loco_registry[loco_name]
 end
 
 
