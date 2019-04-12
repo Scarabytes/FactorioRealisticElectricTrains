@@ -199,7 +199,7 @@ local dummy_fuel_1 = {
 	fuel_category = "dummy",
 	fuel_value = toJ(config.locomotive_storage),
 	fuel_acceleration_multiplier = 1.5,
-	fuel_top_speed_multiplier = 1.2,
+	fuel_top_speed_multiplier = 1.0,
 	fuel_emission_multiplier = 0.1
 	-- For Locomotive Mk1
 	-- Adjusted acceleration: 150%
@@ -215,7 +215,7 @@ local dummy_fuel_2 = {
 	fuel_category = "dummy",
 	fuel_value = toJ(config.advanced_locomotive_storage),
 	fuel_acceleration_multiplier = 1.0,
-	fuel_top_speed_multiplier = 1.2,
+	fuel_top_speed_multiplier = 1.0,
 	fuel_emission_multiplier = 0.1
 	-- For Locomotive Mk2
 	-- Adjusted acceleration: 200%
@@ -225,7 +225,7 @@ data:extend{dummy_pole_energy, dummy_pole_holder, dummy_fuel_1, dummy_fuel_2}
 
 
 -- Generate dummy fuel items for the modular locomotive
--- Adjusted base acceleration: 250%
+-- Adjusted base acceleration: 300%
 
 for s = 0, 4 do
 	for p = 0, 4 - s do

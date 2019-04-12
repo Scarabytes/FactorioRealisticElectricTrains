@@ -151,21 +151,15 @@ do
 		["ret-chain-pole-base"] = true
 	}
 
-	local is_electric_locomotive = {
-		["ret-electric-locomotive"] = true,
-		["ret-electric-locomotive-mk2"] = true,
-		["ret-modular-locomotive"] = true
-	}
-
 	-- Handles the events on_built_entity & on_robot_built_entity
 	function on_entity_built(event)
-		local e = event.created_entity
+		local e = event.created_entity or event.entity
 		local n = e.name
 
 			if is_placer_or_base[n] then
 				create_pole(e, event.player_index)
 
-			elseif is_electric_locomotive[n] then
+			elseif electric_loco_registry[n] then
 				register_locomotive(e)
 
 			elseif e.type == "straight-rail" or e.type == "curved-rail" then

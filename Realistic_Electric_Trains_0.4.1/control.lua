@@ -68,6 +68,12 @@ function on_startup()
 	end
 end
 
+electric_loco_registry = {
+	["ret-electric-locomotive"] = "ret-dummy-fuel-1",
+	["ret-electric-locomotive-mk2"] = "ret-dummy-fuel-2",
+	["ret-modular-locomotive"] = "ret-dummy-fuel-modular"
+}
+
 -- Settings and configuration changes
 
 require("logic.events.on_setup_changed")
@@ -87,7 +93,9 @@ script.on_configuration_changed(
 
 script.on_event({
 		defines.events.on_built_entity,
-		defines.events.on_robot_built_entity
+		defines.events.on_robot_built_entity,
+		defines.events.script_raised_built,
+		defines.events.script_raised_revive
 	},
 	require("logic.events.on_built")
 )
@@ -99,16 +107,20 @@ script.on_event({
 script.on_event({
 		defines.events.on_entity_died,
 		defines.events.on_pre_player_mined_item,
-		defines.events.on_robot_pre_mined
+		defines.events.on_robot_pre_mined,
+		defines.events.script_raised_destroy
 	},
 	require("logic.events.on_remove")
 )
 
 --==============================================================================
 
--- GUI Events
+-- Module Update events (GUI-Closed and Fast-Transferred)
 
-script.on_event(defines.events.on_gui_closed,
+script.on_event({
+		defines.events.on_gui_closed,
+		defines.events.on_player_fast_transferred
+	},
 	require("logic.events.on_gui_closed")
 )
 
