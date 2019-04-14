@@ -22,6 +22,13 @@ function on_configuration_changed(event)
 	if not global.fuel_for_loco then
 		global.fuel_for_loco = {}
 	end
+
+	if not global.electric_loco_registry then
+		global.electric_loco_registry = {}
+		global.electric_loco_registry["ret-electric-locomotive"] = "ret-dummy-fuel-1"
+		global.electric_loco_registry["ret-electric-locomotive-mk2"] = "ret-dummy-fuel-2"
+		global.electric_loco_registry["ret-modular-locomotive"] = "ret-dummy-fuel-modular"
+	end
 end
 
 -- Performs migration with the global table

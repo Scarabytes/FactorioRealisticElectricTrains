@@ -11,7 +11,7 @@ do
 		local locos_to_remove = {}
 
 		for i = #locos - offset, 1, -ticks_per_update do
-			if locos[i].valid and electric_loco_registry[locos[i].name] then
+			if locos[i].valid and global.electric_loco_registry[locos[i].name] then
 				update_locomotive(locos[i])
 			else
 				-- delete locomotives that cannot be updated anymore
@@ -30,7 +30,7 @@ do
 
 
 	function get_fuel_data(locomotive)
-		local fuel_item = electric_loco_registry[locomotive.name]
+		local fuel_item = global.electric_loco_registry[locomotive.name]
 
 		if fuel_item then
 			if fuel_item == "ret-dummy-fuel-modular" then
@@ -50,13 +50,15 @@ do
 			else
 
 				-- Use the given item
-				local proto = game.item_prototypes["ret-dummy-fuel-1"]
+				local proto = game.item_prototypes[fuel_item]
 				return {
 					item = proto,
 					power = 1,
 					transfer = calc_transfer_rate(locomotive.name)
 				}
 			end
+		else
+			return nil
 		end
 	end
 
