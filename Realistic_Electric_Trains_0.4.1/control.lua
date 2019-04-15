@@ -40,6 +40,11 @@ script.on_init(
 		global.power_for_rail = {}  -- Rail ID -> Power Entity
 		global.electric_locos = {}  -- Array of Loco Entity
 		global.fuel_for_loco = {}   -- Loco ID -> Table {fuel, transfer}
+		
+		global.electric_loco_registry = {}
+		global.electric_loco_registry["ret-electric-locomotive"] = "ret-dummy-fuel-1"
+		global.electric_loco_registry["ret-electric-locomotive-mk2"] = "ret-dummy-fuel-2"
+		global.electric_loco_registry["ret-modular-locomotive"] = "ret-dummy-fuel-modular"
 
 		on_startup()
 	end
@@ -67,12 +72,6 @@ function on_startup()
 		remote.call("FuelTrainStop", "exclude_from_fuel_schedule", "ret-modular-locomotive")
 	end
 end
-
-electric_loco_registry = {
-	["ret-electric-locomotive"] = "ret-dummy-fuel-1",
-	["ret-electric-locomotive-mk2"] = "ret-dummy-fuel-2",
-	["ret-modular-locomotive"] = "ret-dummy-fuel-modular"
-}
 
 -- Settings and configuration changes
 

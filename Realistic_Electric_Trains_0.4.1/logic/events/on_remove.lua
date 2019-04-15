@@ -53,7 +53,7 @@ do
 		   n == "ret-chain-pole-base" then
 				destroy_pole(e)
 
-		elseif electric_loco_registry[n] then
+		elseif global.electric_loco_registry[n] then
 				deregister_locomotive(e)
 
 		elseif e.type == "straight-rail" or e.type == "curved-rail" then

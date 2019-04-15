@@ -6,16 +6,19 @@ do
 
 	function on_gui_closed(event) 
 		local entity = event.entity
-		if entity and entity.name == "ret-modular-locomotive" then
-			global.fuel_for_loco[entity.unit_number] = nil
-			if enable_modular_info then
-				local c = get_module_counts(entity)
-				local item_name = get_module_string(c.s, c.p, c.e, c.b)
-				local prototype = game.item_prototypes["ret-dummy-fuel-modular-" .. item_name]
-				if prototype then
-					draw_statistics_message(entity, event.player_id)
-				else
-					draw_invalid_combination_message(entity, event.player_id)
+		if entity and entity.valid then
+			local fuel_item = global.electric_loco_registry[entity.name]
+			if fuel_item and fuel_item == "ret-dummy-fuel-modular" then
+				global.fuel_for_loco[entity.unit_number] = nil
+				if enable_modular_info then
+					local c = get_module_counts(entity)
+					local item_name = get_module_string(c.s, c.p, c.e, c.b)
+					local prototype = game.item_prototypes["ret-dummy-fuel-modular-" .. item_name]
+					if prototype then
+						draw_statistics_message(entity, event.player_id)
+					else
+						draw_invalid_combination_message(entity, event.player_id)
+					end
 				end
 			end
 		end
