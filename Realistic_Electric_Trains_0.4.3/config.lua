@@ -8,7 +8,7 @@ function store(power)
 end
 
 config = {
-	pole_max_wire_distance = 16,
+	pole_max_wire_distance = 17,
 
 	pole_supply_area = 4,
 

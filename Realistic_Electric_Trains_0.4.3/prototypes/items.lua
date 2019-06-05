@@ -5,17 +5,23 @@ require("copy_prototype")
 require("logic.modular_locomotive")
 
 -- Add electric train subgroup
+local train_group = "logistics"
+if mods["SchallTransportGroup"] then
+	train_group = "transport"
+end
+
+-- Add electric train subgroup
 data:extend{{
 	type = "item-subgroup",
 	name = "electric-trains",
-	group = "logistics",
+	group = train_group,
 	order = "e-a"
 }}
 
 data:extend{{
 	type = "item-subgroup",
 	name = "electric-train-modules",
-	group = "logistics",
+	group = train_group,
 	order = "e-b"
 }}
 

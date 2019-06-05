@@ -100,7 +100,8 @@ do
 		install_pole(pole, {
 				show_failures = enable_failure_text, 
 				show_particles = enable_connect_particles,
-				install_circuit_wire = true
+				install_circuit_wire = true,
+				remove_other_wires = remove_wires_on_build
 		}, nil, player)
 
 		if enable_rewire_neighbours then

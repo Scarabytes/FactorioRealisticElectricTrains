@@ -9,6 +9,7 @@ function on_settings_changed(event)
 	enable_modular_info = settings.global["ret-enable-modular-info"].value
 	enable_zigzag_wire = settings.global["ret-enable-zigzag-wire"].value
 	enable_zigzag_vertical_only = settings.global["ret-enable-zigzag-vertical-only"].value
+	remove_wires_on_build = settings.global["ret-remove-wires-on-build"].value
 	enable_circuit_wire = settings.global["ret-enable-circuit-wire"].value
 	enable_rewire_neighbours = settings.global["ret-enable-rewire-neighbours"].value
 	max_pole_search_distance = settings.global["ret-max-pole-search-distance"].value

@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 04.06.2019
+  Features: 
+    - Adding support for the Transport Group Mod
+    - Adding option to remove all wire connections when a pole is placed
+  Changes:
+    - Poles can now be placed on water to support bridge mods
+    - Poles can now reach 17 tiles to bridge the roboport distance more easily
+  Fixes:
+    - Removing double multiplication where only one was correct
+---------------------------------------------------------------------------------------------------
 Version: 0.4.2
 Date: 14.04.2019
   Fixes:

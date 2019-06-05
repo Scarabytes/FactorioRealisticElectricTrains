@@ -48,12 +48,20 @@ local enable_circuit_wire = {
 	order = "b-b"
 }
 
+local remove_wires_on_build = {
+	type = "bool-setting",
+	name = "ret-remove-wires-on-build",
+	setting_type = "runtime-global",
+	default_value = false,
+	order = "b-c"
+}
+
 local enable_rewire_neighbours = {
 	type = "bool-setting",
 	name = "ret-enable-rewire-neighbours",
 	setting_type = "runtime-global",
 	default_value = false,
-	order = "b-c"
+	order = "b-d"
 }
 
 local max_pole_search_distance = {
@@ -77,5 +85,6 @@ local ticks_per_update = {
 }
 
 data:extend{enable_connect_particles, enable_failure_text, enable_modular_info_text,
-			enable_circuit_wire, enable_zigzag_wire, enable_zigzag_vertical_only,
-			enable_rewire_neighbours, max_pole_search_distance, ticks_per_update}
+			remove_wires_on_build, enable_circuit_wire, enable_zigzag_wire, 
+			enable_zigzag_vertical_only, enable_rewire_neighbours, 
+			max_pole_search_distance, ticks_per_update}

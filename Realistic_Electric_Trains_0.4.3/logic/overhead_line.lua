@@ -101,7 +101,7 @@ function remove_powered_rails(search_results, show_particles)
 end
 
 -- Deletes all copper wires to other poles and reconnects only neighboring poles
-function rewire_pole(pole, search_results, circuit_wire)
+function rewire_pole(pole, search_results, circuit_wire, remove_other_lines)
 	-- disconnect all wires to neighbour overhead lines
 	local wire = global.wire_for_pole[pole.unit_number]
 
@@ -111,7 +111,7 @@ function rewire_pole(pole, search_results, circuit_wire)
 	end
 
 	for _, neighbour in pairs(wire.neighbours.copper) do
-		if neighbour.name == "ret-pole-wire" then
+		if neighbour.name == "ret-pole-wire" or remove_other_lines then
 			wire.disconnect_neighbour(neighbour)
 		end
 	end
@@ -242,7 +242,7 @@ function install_pole(pole, options, ignore, player)
 	if options.show_failures and player then display_failures(pole, next_poles, player) end
 	mark_powered_rails(pole, next_poles, options.show_particles)
 	if enable_zigzag_wire then zigzag_pole_wire(pole, next_poles) end
-	rewire_pole(pole, next_poles, options.install_circuit_wire)
+	rewire_pole(pole, next_poles, options.install_circuit_wire, options.remove_other_wires)
 end
 
 -- Unpowers rails up to the next poles.
