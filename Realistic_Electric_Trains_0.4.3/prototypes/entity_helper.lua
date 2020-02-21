@@ -134,7 +134,7 @@ pole_child_template = {
 
 function make_particle(name, picture)
 	return {
-		type = "particle",
+		type = "optimized-particle",
 		name = name,
 		flags = { "not-on-map", "placeable-off-grid" },
 		pictures = {{
