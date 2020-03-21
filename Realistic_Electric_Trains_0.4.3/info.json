@@ -1,11 +1,11 @@
 {
 	"name": "Realistic_Electric_Trains",
-	"version": "0.4.3",
+	"version": "0.4.4",
 	"title": "Realistic Electric Trains",
 	"author": "J_Aetherwing",
 	"contact": "",
 	"homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64946",
-	"factorio_version": "0.17",
+	"factorio_version": "0.18",
 	"dependencies": [
 		"base >= 0.17",
 		"? FuelTrainStop >= 0.17.2",
