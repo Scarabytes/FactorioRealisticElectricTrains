@@ -131,6 +131,7 @@ pole_child_template = {
 	collision_mask = {},
 	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
 	selection_priority = 25,
+	resistances = {{type="fire", percent=100}}
 }
 
 function make_particle(name, picture)
