@@ -113,6 +113,7 @@ function make_pole_base(type, name, placer, icon, circuit_connectors)
 		max_health = 100,
 		corpse = "small-remnants",
 		minable = { hardness = 0.2, mining_time = 0.5, result = placer },
+		resistances = {{type="fire", percent=100}},
 		placeable_by = { item = placer, count = 1 },
 		collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
 		selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
