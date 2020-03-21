@@ -227,8 +227,8 @@ function zigzag_pole_wire(start_pole, search_results)
 	if has_straight and (has_vertical or not enable_zigzag_vertical_only) then
 		local wire = global.wire_for_pole[start_pole.unit_number]
 		if not wire or not wire.valid then
-			respawn_pole_children(pole)
-			wire = global.wire_for_pole[pole.unit_number]
+			respawn_pole_children(start_pole)
+			wire = global.wire_for_pole[start_pole.unit_number]
 		end
 		local position = wire_pos_for_pole(start_pole.position, 
 							fix_pole_dir(start_pole), invert[other_nonstandard])

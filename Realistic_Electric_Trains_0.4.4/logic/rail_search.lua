@@ -248,7 +248,7 @@ do
 				-- check actual distance between pole wires
 				local target_wire = global.wire_for_pole[result.pole.unit_number]
 
-				if successful and util.distance(start_position, target_wire.position) > max_distance + 0.2 then
+				if successful and target_wire.valid and util.distance(start_position, target_wire.position) > max_distance + 0.2 then
 					table.insert(failure, {pole = result.pole, path = result.path, curve = nil})
 					successful = false
 				end
