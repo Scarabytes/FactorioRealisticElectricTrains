@@ -1,0 +1,23 @@
+Locomotive:
+
+Image Size:          238*230
+1 tile horizontally: 32px
+1 tile vertically:   22px
+
+Image Center:        119:115
+Object Center:       119:138
+  Shift by pixel:      0: 23
+3D Position:         0: 0: 1
+  Shift by pixel:      0:-22
+Cosmetic shift:        0: -6
+Total shift by pixel:  0: -5
+
+
+Shadow:
+
+Image Size:          253*212
+1 tile horizontally: 32px
+1 tile vertically:   23px
+
+Image Center:        127:106
+Object Center:       110:106
