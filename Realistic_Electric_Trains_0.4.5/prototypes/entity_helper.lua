@@ -89,7 +89,7 @@ function make_pole_placer(name, icon)
 		},
 		flags = {"placeable-neutral", "player-creation", "building-direction-8-way", 
 		         "filter-directions", "fast-replaceable-no-build-while-moving" },
-		collision_mask = {"object-layer"},
+		collision_mask = {"object-layer", "rail-layer"},
 		fast_replaceable_group = "rail-signal",
 		max_health = 100,
 		corpse = "small-remnants",
@@ -117,7 +117,7 @@ function make_pole_base(type, name, placer, icon, circuit_connectors)
 		placeable_by = { item = placer, count = 1 },
 		collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
 		selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
-		collision_mask = {"object-layer"},
+		collision_mask = {"object-layer", "rail-layer"},
 		circuit_wire_max_distance = config.pole_max_wire_distance,
 		circuit_wire_connection_points = circuit_connectors
 	}
