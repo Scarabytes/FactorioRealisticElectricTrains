@@ -1,4 +1,29 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.9
+Date: 06.01.2022
+  Fixed:
+    - Mod naming issue preventing a load.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+Date: 06.01.2022
+  Changes:
+    - Reverted the locomotive back to what it used to be.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+Date: 02.12.2020
+  Changes:
+    - Bumped base to 1.1.
+    - Updated changelog
+  Fixes:
+    - Changed name in data.lua
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+Date: 02.12.2020
+  Changes:
+    - Updated to Factorio 1.1.
+  Fixes:
+    - Added rail-layer collision mask to base pole entities
+---------------------------------------------------------------------------------------------------
 Version: 0.4.5
 Date: 26.09.2020
   Features:

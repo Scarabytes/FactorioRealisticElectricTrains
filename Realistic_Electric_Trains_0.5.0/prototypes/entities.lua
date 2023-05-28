@@ -206,7 +206,6 @@ electric_locomotive.braking_force = 16
 electric_locomotive.reversing_power_modifier = 0.8
 electric_locomotive.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
 electric_locomotive.max_power = toW(config.locomotive_power)
-update_locomotive_sprites(electric_locomotive, graphics.."/entities/locomotive/electric-locomotive")
 
 
 local electric_locomotive_mk2 =
@@ -219,7 +218,6 @@ electric_locomotive_mk2.reversing_power_modifier = 0.8
 electric_locomotive_mk2.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
 electric_locomotive_mk2.max_power = toW(config.advanced_locomotive_power)
 electric_locomotive_mk2.max_speed = 1.4
-update_locomotive_sprites(electric_locomotive_mk2, graphics.."/entities/locomotive/electric-locomotive")
 
 
 local modular_electric_locomotive =
@@ -233,6 +231,5 @@ modular_electric_locomotive.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 }
 modular_electric_locomotive.max_power = toW(config.modular_locomotive_base_power)
 modular_electric_locomotive.max_speed = 1.4
 modular_electric_locomotive.equipment_grid = "modular-locomotive-grid"
-update_locomotive_sprites(modular_electric_locomotive, graphics.."/entities/locomotive/electric-locomotive")
 
 data:extend{electric_locomotive, electric_locomotive_mk2, modular_electric_locomotive}
