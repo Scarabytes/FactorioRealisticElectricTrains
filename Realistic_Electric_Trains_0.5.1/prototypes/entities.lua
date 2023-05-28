@@ -32,7 +32,6 @@ simple_pole_straight.activity_led_sprites = { sheet = {
 simple_pole_straight.activity_led_light_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}}
 
 
-
 local simple_pole_diagonal = make_pole_base("constant-combinator", "ret-pole-base-diagonal",
 	"ret-pole-placer", "items/power-pole.png", pole_circuit_connections_diagonal)
 
@@ -46,7 +45,6 @@ simple_pole_diagonal.activity_led_sprites = { sheet = {
 		filename = graphics .. "empty.png", width = 1, height = 1
 	}}
 simple_pole_diagonal.activity_led_light_offsets = { {0, 0}, {0, 0}, {0, 0}, {0, 0}}
-
 
 
 local signal_pole = make_pole_base("rail-signal", "ret-signal-pole-base",
@@ -64,7 +62,6 @@ signal_pole.rail_piece = data.raw["rail-signal"]["rail-signal"].rail_piece
 signal_pole.green_light = {intensity = 0.2, size = 4, color={g=1}}
 signal_pole.orange_light = {intensity = 0.2, size = 4, color={r=1, g=0.5}}
 signal_pole.red_light = {intensity = 0.2, size = 4, color={r=1}}
-
 
 
 local chain_pole = make_pole_base("rail-chain-signal", "ret-chain-pole-base",
@@ -85,14 +82,11 @@ chain_pole.orange_light = {intensity = 0.3, size = 4, color={r=0.8, g=0.7, b=0.3
 chain_pole.red_light = {intensity = 0.3, size = 4, color={r=0.8, g=0.4, b=0.4}}
 chain_pole.blue_light = {intensity = 0.3, size = 4, color={r=0.2, g=0.5, b=0.8}}
 
-
 -- Extend
-
 data:extend{simple_pole_straight, simple_pole_diagonal, signal_pole, chain_pole}
+--==============================================================================--
 
---==============================================================================
 -- Pole child entities
-
 local pole_wire = {
 	type = "electric-pole",
 	name = "ret-pole-wire",
@@ -119,10 +113,7 @@ local pole_wire = {
 	radius_visualisation_picture = data.raw["electric-pole"]["medium-electric-pole"].radius_visualisation_picture
 }
 
-
-
 local pole_power_straight = copy_table(pole_child_template, "ret-pole-energy-straight")
-
 pole_power_straight.picture = {
 		filename = graphics .. "entities/pole-straight.png",
 		width = 128, height = 160, shift = util.by_pixel(45, -55)
@@ -135,9 +126,7 @@ pole_power_straight.energy_source = {
 	}
 
 
-
 local pole_power_diagonal = copy_table(pole_child_template, "ret-pole-energy-diagonal")
-
 pole_power_diagonal.picture = {
 		filename = graphics .. "entities/pole-diagonal.png",
 		width = 128, height = 160, shift = util.by_pixel(45, -55)
@@ -150,9 +139,7 @@ pole_power_diagonal.energy_source = {
 	}
 
 
-
 local pole_holder_straight = copy_table(pole_child_template, "ret-pole-holder-straight")
-
 pole_holder_straight.render_layer = "wires-above"
 pole_holder_straight.pictures = { sheets = {{
 		filename = graphics .. "entities/wire-holder-straight.png",
@@ -166,9 +153,7 @@ pole_holder_straight.placeable_by = { item = "ret-dummy-pole-holder", count = 1}
 pole_holder_straight.energy_source = dummy_energy_source
 
 
-
 local pole_holder_diagonal = copy_table(pole_child_template, "ret-pole-holder-diagonal")
-
 pole_holder_diagonal.render_layer = "wires-above"
 pole_holder_diagonal.pictures = { sheets = {{
 		filename = graphics .. "entities/wire-holder-diagonal.png",
@@ -181,22 +166,18 @@ pole_holder_diagonal.pictures = { sheets = {{
 pole_holder_diagonal.placeable_by = { item = "ret-dummy-pole-holder", count = 1}
 pole_holder_diagonal.energy_source = dummy_energy_source
 
-
 -- Extend
-
 data:extend{pole_wire, pole_power_straight, pole_power_diagonal, pole_holder_straight, pole_holder_diagonal}
+--==============================================================================--
 
---==============================================================================
 -- Particles
-
 data:extend {
 	make_particle("ret-connected-particle", "entities/powered-particle.png"),
 	make_particle("ret-disconnected-particle", "entities/unpowered-particle.png")
 }
+--==============================================================================--
 
---==============================================================================
 -- Electric Locomotives
-
 local electric_locomotive =
 	copy_prototype("locomotive", "locomotive", "ret-electric-locomotive")
 electric_locomotive.burner.fuel_inventory_size = 0
@@ -232,6 +213,7 @@ modular_electric_locomotive.max_power = toW(config.modular_locomotive_base_power
 modular_electric_locomotive.max_speed = 1.4
 modular_electric_locomotive.equipment_grid = "modular-locomotive-grid"
 
+
 local modular_electric_locomotive_mk2 =
 	copy_prototype("locomotive", "locomotive", "ret-modular-locomotive-mk2")
 modular_electric_locomotive_mk2.burner.fuel_inventory_size = 0
@@ -243,6 +225,7 @@ modular_electric_locomotive_mk2.color = { r = 0.00, g = 0.76, b = 0.96, a = 0.5 
 modular_electric_locomotive_mk2.max_power = toW(config.modular_locomotive_base_power)
 modular_electric_locomotive_mk2.max_speed = 2
 modular_electric_locomotive_mk2.equipment_grid = "modular-locomotive-grid-mk2"
+
 
 local modular_electric_locomotive_mk3 =
 	copy_prototype("locomotive", "locomotive", "ret-modular-locomotive-mk3")
@@ -256,4 +239,6 @@ modular_electric_locomotive_mk3.max_power = toW(config.modular_locomotive_base_p
 modular_electric_locomotive_mk3.max_speed = 2
 modular_electric_locomotive_mk3.equipment_grid = "modular-locomotive-grid-mk3"
 
+-- Extend
 data:extend{electric_locomotive, electric_locomotive_mk2, modular_electric_locomotive, modular_electric_locomotive_mk2, modular_electric_locomotive_mk3}
+--==============================================================================--
