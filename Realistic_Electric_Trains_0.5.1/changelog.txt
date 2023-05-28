@@ -8,10 +8,10 @@ Date: 28.05.2023
     - Add battery module mk3
     - Add battery module mk3
   Changes:
-    - NOT FINNISH TEXTURE UPDATE
-    - 
+    - New Icon train Electric
+    - New Icon module
   Fixes:
-    - loading Fixes
+    - Error loading Fixes
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 25.05.2023
