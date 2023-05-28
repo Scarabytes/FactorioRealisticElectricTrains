@@ -1,10 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 28.05.2023
+  Features: 
+    -
+  Changes:
+    - New Icon module
+  Fixes:
+    -
+---------------------------------------------------------------------------------------------------
 Version: 0.5.1
 Date: 28.05.2023
   Features: 
     - Add modular electric locomotive mk2
     - Add modular electric locomotive mk3
-
+    
     - Add battery module mk3
     - Add battery module mk3
   Changes:
