@@ -1,17 +1,31 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 25.05.2023
+  Features: 
+    - Add modular electric locomotive mk2
+    - Add modular electric locomotive mk3
+
+    - Add battery module mk3
+    - Add battery module mk3
+
+    - 
+  Changes:
+    - 
+    - 
+  Fixes:
+    - loading Fixes
+---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 25.05.2023
   Features:
     - Add French Locate
     - Add Japanese Locate
-
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.9
 Date: 28.05.2023
   Changes:
     - FORK PROJECT
     - New Author -> AudricSan
-
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.9
 Date: 06.01.2022

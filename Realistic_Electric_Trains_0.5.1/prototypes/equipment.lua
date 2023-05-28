@@ -14,7 +14,23 @@ local grid = {
 	height = 2	
 }
 
-data:extend{category, grid}
+local gridmk2 = {
+	type = "equipment-grid",
+	name = "modular-locomotive-grid-mk2",
+	equipment_categories = { "electric-loco-modules" },
+	width = 8,
+	height = 4	
+}
+
+local gridmk3 = {
+	type = "equipment-grid",
+	name = "modular-locomotive-grid-mk3",
+	equipment_categories = { "electric-loco-modules" },
+	width = 8,
+	height = 8	
+}
+
+data:extend{category, grid, gridmk2, gridmk3}
 
 
 local train_speed_module = {
@@ -85,4 +101,39 @@ local train_battery_module = {
 	background_color = { r = 0.5, g = 0.5, b = 0.5 }
 }
 
-data:extend{train_speed_module, train_productivity_module, train_efficiency_module, train_battery_module}
+local train_battery_module_mk2 = {
+	type = "battery-equipment",
+	name = "ret-train-battery-module-mk2",
+	sprite = {
+		filename = graphics .. "equipment/train-battery-module.png",
+		width = 64, height = 64
+	},
+	shape = { width = 2, height = 2, type = "full" },
+	categories = { "electric-loco-modules" },
+	energy_source = {
+		type = "electric",
+		buffer_capacity = "0J",
+		usage_priority = "secondary-output"
+	},
+	background_color = { r = 0.5, g = 0.5, b = 0.5 }
+}
+
+local train_battery_module_mk3 = {
+	type = "battery-equipment",
+	name = "ret-train-battery-module-mk3",
+	sprite = {
+		filename = graphics .. "equipment/train-battery-module.png",
+		width = 64, height = 64
+	},
+	shape = { width = 2, height = 2, type = "full" },
+	categories = { "electric-loco-modules" },
+	energy_source = {
+		type = "electric",
+		buffer_capacity = "0J",
+		usage_priority = "secondary-output"
+	},
+	background_color = { r = 0.5, g = 0.5, b = 0.5 }
+}
+
+data:extend{train_speed_module, train_productivity_module, train_efficiency_module,
+			train_battery_module, train_battery_module_mk2, train_battery_module_mk3}

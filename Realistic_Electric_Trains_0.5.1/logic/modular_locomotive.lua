@@ -37,7 +37,9 @@ function get_module_counts(locomotive)
 			s = contents["ret-train-speed-module"] or 0,
 			p = contents["ret-train-productivity-module"] or 0,
 			e = contents["ret-train-efficiency-module"] or 0,
-			b = contents["ret-train-battery-module"] or 0
+			b = contents["ret-train-battery-module"] or 0,
+			f = contents["ret-train-battery-module-mk2"] or 0,
+			g = contents["ret-train-battery-module-mk3"] or 0,
 		}
 	else
 		return {s = 0, p = 0, e = 0, b = 0}

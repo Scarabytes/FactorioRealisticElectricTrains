@@ -44,34 +44,12 @@ script.on_init(
 		global.electric_loco_registry = {}
 		global.electric_loco_registry["ret-electric-locomotive"] = "ret-dummy-fuel-1"
 		global.electric_loco_registry["ret-electric-locomotive-mk2"] = "ret-dummy-fuel-2"
+		
 		global.electric_loco_registry["ret-modular-locomotive"] = "ret-dummy-fuel-modular"
-
-		on_startup()
+		global.electric_loco_registry["ret-modular-locomotive-mk2"] = "ret-dummy-fuel-modular-2"
+		global.electric_loco_registry["ret-modular-locomotive-mk3"] = "ret-dummy-fuel-modular-3"
 	end
 )
-
-script.on_load(
-	function(e)
-		on_startup()
-	end
-)
-
-function on_startup()
-	-- Exclude the energy consumer and wire holder from creative mode's instant blueprints
-	if remote.interfaces["creative-mode"] then
-		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-energy-straight")
-		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-energy-diagonal")
-		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-holder-straight")
-		remote.call("creative-mode", "exclude_from_instant_blueprint", "ret-pole-holder-diagonal")
-	end
-
-	-- Exclude electric locomotives from the Automatic Train Fuel Stop
-	if remote.interfaces["FuelTrainStop"] then
-		remote.call("FuelTrainStop", "exclude_from_fuel_schedule", "ret-electric-locomotive")
-		remote.call("FuelTrainStop", "exclude_from_fuel_schedule", "ret-electric-locomotive-mk2")
-		remote.call("FuelTrainStop", "exclude_from_fuel_schedule", "ret-modular-locomotive")
-	end
-end
 
 -- Settings and configuration changes
 

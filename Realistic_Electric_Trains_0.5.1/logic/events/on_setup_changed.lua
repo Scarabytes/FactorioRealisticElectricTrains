@@ -29,6 +29,8 @@ function on_configuration_changed(event)
 		global.electric_loco_registry["ret-electric-locomotive"] = "ret-dummy-fuel-1"
 		global.electric_loco_registry["ret-electric-locomotive-mk2"] = "ret-dummy-fuel-2"
 		global.electric_loco_registry["ret-modular-locomotive"] = "ret-dummy-fuel-modular"
+		global.electric_loco_registry["ret-modular-locomotive-mk2"] = "ret-dummy-fuel-modular-mk2"
+		global.electric_loco_registry["ret-modular-locomotive-mk3"] = "ret-dummy-fuel-modular-mk3"
 	end
 end
 

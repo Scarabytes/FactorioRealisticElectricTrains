@@ -5,7 +5,10 @@ if mods["TrainOverhaul"] then
 
 	local loco_1 = data.raw["locomotive"]["ret-electric-locomotive"]
 	local loco_2 = data.raw["locomotive"]["ret-electric-locomotive-mk2"]
+	
 	local loco_modular = data.raw["locomotive"]["ret-modular-locomotive"]
+	local loco_modular_2 = data.raw["locomotive"]["ret-modular-locomotive-mk2"]
+	local loco_modular_3 = data.raw["locomotive"]["ret-modular-locomotive-mk3"]
 
 	local loco_1_power = 1200 * settings.startup["train-overhaul-power-multiplicator"].value
 	local loco_2_power = 2600 * settings.startup["train-overhaul-power-multiplicator"].value
@@ -41,6 +44,16 @@ if mods["TrainOverhaul"] then
 	loco_modular.friction_force = 0.50 -- constant acceleration reduction, default: 0.5
 	loco_modular.air_resistance = 0.015 -- exponential max_speed reduction, default: 0.0075
 	loco_modular.burner.effectivity = loco_effectivity
+	
+	loco_modular_2.max_power = loco_modular_power .. "kW"
+	loco_modular_2.max_health = 1500
+	loco_modular_2.max_speed = 1.4
+	loco_modular_2.weight = 5000 * settings.startup["train-overhaul-weight-multiplicator"].value
+	loco_modular_2.reversing_power_modifier = 1
+	loco_modular_2.braking_force = 48
+	loco_modular_2.friction_force = 0.50 -- constant acceleration reduction, default: 0.5
+	loco_modular_2.air_resistance = 0.015 -- exponential max_speed reduction, default: 0.0075
+	loco_modular_2.burner.effectivity = loco_effectivity
 
 
 	local dummy_fuel_1 = data.raw["item"]["ret-dummy-fuel-1"]

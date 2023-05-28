@@ -93,6 +93,34 @@ data:extend {
 
 {
 	type = "recipe",
+	name = "ret-modular-locomotive-mk2",
+	result = "ret-modular-locomotive-mk2",
+	ingredients = {
+		{"ret-modular-locomotive", 1},
+		{"electric-engine-unit", 20},
+		{"processing-unit", 20},
+		{"low-density-structure", 30}
+	},
+	energy_required = 32,
+	enabled = false
+},
+
+{
+	type = "recipe",
+	name = "ret-modular-locomotive-mk3",
+	result = "ret-modular-locomotive-mk3",
+	ingredients = {
+		{"ret-modular-locomotive-mk2", 1},
+		{"electric-engine-unit", 20},
+		{"processing-unit", 20},
+		{"low-density-structure", 30}
+	},
+	energy_required = 32,
+	enabled = false
+},
+
+{
+	type = "recipe",
 	name = "ret-train-speed-module",
 	result = "ret-train-speed-module",
 	ingredients = {
@@ -140,6 +168,32 @@ data:extend {
 		{"low-density-structure", 5}
 	},
 	energy_required = 30,
+	enabled = false
+},
+
+{
+	type = "recipe",
+	name = "ret-train-battery-module-mk2",
+	result = "ret-train-battery-module-mk2",
+	ingredients = {
+		{"battery", 60},
+		{"processing-unit", 5},
+		{"low-density-structure", 10}
+	},
+	energy_required = 60,
+	enabled = false
+},
+
+{
+	type = "recipe",
+	name = "ret-train-battery-module-mk3",
+	result = "ret-train-battery-module-mk3",
+	ingredients = {
+		{"battery", 90},
+		{"processing-unit", 10},
+		{"low-density-structure", 20}
+	},
+	energy_required = 90,
 	enabled = false
 }
 

@@ -115,7 +115,29 @@ local modular_locomotive = {
 	order = "b[locomotives]-c"
 }
 
-data:extend{electric_locomotive, electric_locomotive_mk2, modular_locomotive}
+local modular_locomotive_mk2 = {
+	type = "item-with-entity-data",
+	name = "ret-modular-locomotive-mk2",
+	icon = graphics .. "items/modular-locomotive-mk2.png",
+	icon_size = 32,
+	place_result = "ret-modular-locomotive-mk2",
+	stack_size = 5,
+	subgroup = "electric-trains",
+	order = "b[locomotives]-d"
+}
+
+local modular_locomotive_mk3 = {
+	type = "item-with-entity-data",
+	name = "ret-modular-locomotive-mk3",
+	icon = graphics .. "items/modular-locomotive-mk3.png",
+	icon_size = 32,
+	place_result = "ret-modular-locomotive-mk3",
+	stack_size = 5,
+	subgroup = "electric-trains",
+	order = "b[locomotives]-e"
+}
+
+data:extend{electric_locomotive, electric_locomotive_mk2, modular_locomotive, modular_locomotive_mk2, modular_locomotive_mk3}
 
 --==============================================================================
 
@@ -165,8 +187,30 @@ local train_battery_module = {
 	order = "d"
 }
 
+local train_battery_module_mk2 = {
+	type = "item",
+	name = "ret-train-battery-module-mk2",
+	icon = graphics .. "items/train-battery-module-mk2.png",
+	icon_size = 32,
+	placed_as_equipment_result = "ret-train-battery-module-mk2",
+	stack_size = 10,
+	subgroup = "electric-train-modules",
+	order = "e"
+}
+
+local train_battery_module_mk3 = {
+	type = "item",
+	name = "ret-train-battery-module-mk3",
+	icon = graphics .. "items/train-battery-module-mk3.png",
+	icon_size = 32,
+	placed_as_equipment_result = "ret-train-battery-module-mk3",
+	stack_size = 5,
+	subgroup = "electric-train-modules",
+	order = "f"
+}
+
 data:extend{train_speed_module, train_productivity_module, train_efficiency_module,
-			train_battery_module}
+			train_battery_module, train_battery_module_mk2, train_battery_module_mk3}
 
 --==============================================================================
 
@@ -264,5 +308,3 @@ for s = 0, 4 do
 		end
 	end
 end
-
-
