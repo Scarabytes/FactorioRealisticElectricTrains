@@ -1,0 +1,13 @@
+{
+	"name": "AudricSan_Realistic_Electric_Trains",
+	"version": "0.5.1",
+	"title": "AudricSan's Realistic Electric Trains",
+	"author": "AudricSan",
+	"contact": "https://github.com/AudricSan/FactorioRealisticElectricTrains/discussions/1",
+	"homepage": "https://github.com/AudricSan/FactorioRealisticElectricTrains",
+	"factorio_version": "1.1",
+	"dependencies": [
+		"base >= 1.1"
+	],
+	"description": "This mod adds electric trains which require power delivered by overhead lines."
+}

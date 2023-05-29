@@ -1,0 +1,154 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 28.05.2023
+  Features: 
+    -
+  Changes:
+    - New Icon module
+  Fixes:
+    -
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 28.05.2023
+  Features: 
+    - Add modular electric locomotive mk2
+    - Add modular electric locomotive mk3
+    
+    - Add battery module mk3
+    - Add battery module mk3
+  Changes:
+    - New Icon train Electric
+    - New Icon module
+  Fixes:
+    - Error loading Fixes
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 25.05.2023
+  Features:
+    - Add French Locate
+    - Add Japanese Locate
+---------------------------------------------------------------------------------------------------
+Version: 0.4.9
+Date: 28.05.2023
+  Changes:
+    - FORK PROJECT
+    - New Author -> AudricSan
+---------------------------------------------------------------------------------------------------
+Version: 0.4.9
+Date: 06.01.2022
+  Fixed:
+    - Mod naming issue preventing a load.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+Date: 06.01.2022
+  Changes:
+    - Reverted the locomotive back to what it used to be.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+Date: 02.12.2020
+  Changes:
+    - Bumped base to 1.1.
+    - Updated changelog
+  Fixes:
+    - Changed name in data.lua
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+Date: 02.12.2020
+  Changes:
+    - Updated to Factorio 1.1.
+  Fixes:
+    - Added rail-layer collision mask to base pole entities
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+Date: 26.09.2020
+  Features:
+    - Adding a 3D model for the electric locomotive
+  Changes:
+    - Updating to Factorio 1.0
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+Date: 21.03.2020
+  Changes:
+    - Updating to Factorio 0.18
+    - Powerpoles are no longer flammable
+  Fixes:
+    - Fixed two crashes
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 04.06.2019
+  Features: 
+    - Adding support for the Transport Group Mod
+    - Adding option to remove all wire connections when a pole is placed
+  Changes:
+    - Poles can now be placed on water to support bridge mods
+    - Poles can now reach 17 tiles to bridge the roboport distance more easily
+  Fixes:
+    - Removing double multiplication where only one was correct
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 14.04.2019
+  Fixes:
+    - Fixing a comparison in the remote interface
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 12.04.2019
+  Features:
+    - Adding support for the mods Locomotive Overhaul and Automatic Train Fuel Stop
+    - Adding item description to the locomotives
+  Changes:
+    - Removing the energy consumption cap
+    - Improved the remote interface (unfortunately, not backwards compatible)
+  Fixes:
+    - Fixing modules being deleted when a locomotive is picked up
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 23.03.2019
+  Features:
+    - Adding the modular locomotive
+  Changes:
+    - Removing the positive energy buffer in the powerpoles
+    - Adding a remote interface for other mods to register their own electric trains
+    - Changing the flying text to rendered text using the new rendering API
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 10.03.2019
+  Changes:
+    - Adding support for modified burner effectivity
+    - Reduced electric buffer in powerpoles a lot
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 07.03.2019
+  Info:
+    - Updating to 0.17
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 07.03.2019
+  Fixes:
+    - Fixing crash when parts of the pole get deleted
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 25.02.2019
+  Fixes:
+    - Adding missing translation
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 25.02.2019
+  Fixes:
+    - Enabled the research and recipe for the new locomotive.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 25.02.2019
+  Features:
+    - Electric Locomotive Mk2 added
+    - Adding support for modded rails
+  Changes:
+    - Poles are now blueprintable and work even with circuit wires
+    - Update frequency is now customizable; default is 60 Ticks
+    - Accelerations of the locomotives adjusted
